@@ -103,8 +103,8 @@ public class Stuff {
         return  puntosTemp;
     }
 
-    public static ArrayList<Ruta> misRutas(String data){
-        ArrayList<Ruta> misRutasTemp = new ArrayList<>() ;
+    public static ArrayList<MiRuta> misRutas(String data){
+        ArrayList<MiRuta> misRutasTemp = new ArrayList<>() ;
         if(!data.equalsIgnoreCase("")){
             JSONObject JSON;
             try {
@@ -113,9 +113,14 @@ public class Stuff {
 
                 for(int i = 0;i<rutas.length();i++){
                     JSONObject ruta = rutas.getJSONObject(i);
-                    Ruta rutaTemp = new Ruta();
-                    rutaTemp.setId(ruta.optString("idRuta"));
-                    rutaTemp.setPolyLine(ruta.optString("cadenaRuta"));
+
+                    String idRuta = ruta.optString("idRuta");
+                    String cadenaRuta = ruta.optString("cadenaRuta");
+                    String siglas = ruta.optString("siglas") ;
+                    String municipio = ruta.optString("municipio");
+                    String estado  = ruta.optString("estado");
+
+                    MiRuta rutaTemp = new MiRuta(siglas,municipio,estado,idRuta);
                     misRutasTemp.add(rutaTemp);
                 }
 
