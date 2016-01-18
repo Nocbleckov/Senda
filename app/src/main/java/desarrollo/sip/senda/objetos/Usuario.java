@@ -178,6 +178,7 @@ public class Usuario extends Stuff implements Parcelable,Serializable {
             String urlDisplay = url;
             Bitmap bm = null;
             try{
+
                 InputStream iS = new java.net.URL(urlDisplay).openStream();
                 bm = BitmapFactory.decodeStream(iS);
                 foto = bm;

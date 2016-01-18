@@ -120,7 +120,7 @@ public class Stuff {
                     String municipio = ruta.optString("municipio");
                     String estado  = ruta.optString("estado");
 
-                    MiRuta rutaTemp = new MiRuta(siglas,municipio,estado,idRuta);
+                    MiRuta rutaTemp = new MiRuta(siglas,municipio,estado,idRuta,cadenaRuta);
                     misRutasTemp.add(rutaTemp);
                 }
 
@@ -363,6 +363,25 @@ public class Stuff {
         buffer.put(bytes);
         buffer.flip();//need flip
         return buffer.getLong();
+    }
+    public static double[] menorMayor(ArrayList<Double> n) {
+        Double menor = n.get(0);
+        Double mayor = n.get(0);
+        for(int i = 1;i<n.size();i++){
+            if(n.get(i)<menor){
+                menor = n.get(i);
+            }else if(n.get(i)>mayor){
+                mayor = n.get(i);
+            }
+        }
+        double[] resp = {menor,mayor};
+        return resp;
+    }
+
+    public static LatLng puntoCentro(double x1,double y1,double x2,double y2){
+        double xc = ((x1-x2)/2) + x2;
+        double yc = ((y1-y2)/2) + y2;
+        return new LatLng(xc,yc);
     }
 
 }

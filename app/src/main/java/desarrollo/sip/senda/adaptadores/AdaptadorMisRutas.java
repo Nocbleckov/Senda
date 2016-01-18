@@ -5,10 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import desarrollo.sip.senda.R;
 import desarrollo.sip.senda.objetos.MiRuta;
 
@@ -38,7 +40,9 @@ public class AdaptadorMisRutas extends ArrayAdapter<MiRuta> {
         TextView siglas = (TextView)rowView.findViewById(R.id.labelSiglas_AdaptadorMisRutas);
         TextView municipio = (TextView)rowView.findViewById(R.id.labelMunicipio_AdaptadorMisRutas);
         TextView estado = (TextView)rowView.findViewById(R.id.labelEstado_AdaptadorMisRutas);
+        ImageView imagen = (ImageView)rowView.findViewById(R.id.imagenRegionMapa_AdaptadorMisRutas);
 
+        rutas.get(position).getfoto(imagen);
         identificador.setText(rutas.get(position).getIdentificador());
         siglas.setText("Siglas: "+rutas.get(position).getSiglas());
         municipio.setText("Municipio: "+rutas.get(position).getMunicipio());
