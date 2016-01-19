@@ -17,7 +17,6 @@ import desarrollo.sip.senda.R;
 import desarrollo.sip.senda.objetos.MiRuta;
 
 
-
 /**
  * Created by DESARROLLO on 16/01/16.
  */
@@ -37,22 +36,17 @@ public class AdaptadorMisRutas extends ArrayAdapter<MiRuta> {
         View rowView = null;
         LinearLayout linearLayout = null;
 
-        if(convertView == null){
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            rowView = inflater.inflate(R.layout.adaptador_mis_rutas, parent, false);
-            linearLayout = (LinearLayout)rowView.findViewById(R.id.linearLytHorizontal_AdaptadorMisRutas);
-            rowView.setTag(linearLayout);
-        }else{
-            linearLayout = (LinearLayout)convertView.getTag();
-        }
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        rowView = inflater.inflate(R.layout.adaptador_mis_rutas, parent, false);
+        linearLayout = (LinearLayout) rowView.findViewById(R.id.linearLytHorizontal_AdaptadorMisRutas);
+        rowView.setTag(linearLayout);
 
 
-
-        TextView identificador = (TextView)rowView.findViewById(R.id.labelIdentificador_AdaptadorMisRutas);
-        TextView siglas = (TextView)linearLayout.findViewById(R.id.labelSiglas_AdaptadorMisRutas);
-        TextView municipio = (TextView)linearLayout.findViewById(R.id.labelMunicipio_AdaptadorMisRutas);
-        TextView estado = (TextView)linearLayout.findViewById(R.id.labelEstado_AdaptadorMisRutas);
-        ImageView imagen = (ImageView)rowView.findViewById(R.id.imagenRegionMapa_AdaptadorMisRutas);
+        TextView identificador = (TextView) rowView.findViewById(R.id.labelIdentificador_AdaptadorMisRutas);
+        TextView siglas = (TextView) linearLayout.findViewById(R.id.labelSiglas_AdaptadorMisRutas);
+        TextView municipio = (TextView) linearLayout.findViewById(R.id.labelMunicipio_AdaptadorMisRutas);
+        TextView estado = (TextView) linearLayout.findViewById(R.id.labelEstado_AdaptadorMisRutas);
+        ImageView imagen = (ImageView) rowView.findViewById(R.id.imagenRegionMapa_AdaptadorMisRutas);
 
         rutas.get(position).getfoto(imagen);
         identificador.setText(rutas.get(position).getIdentificador());
@@ -64,6 +58,7 @@ public class AdaptadorMisRutas extends ArrayAdapter<MiRuta> {
         linearLayout.addView(municipio);
         linearLayout.addView(estado);
         rowView.setTag(linearLayout);
+
 
         return rowView;
     }

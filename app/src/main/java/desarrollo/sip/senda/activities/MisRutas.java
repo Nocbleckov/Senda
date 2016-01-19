@@ -1,6 +1,7 @@
 package desarrollo.sip.senda.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import desarrollo.sip.senda.MapaActivity;
 import desarrollo.sip.senda.R;
 import desarrollo.sip.senda.adaptadores.AdaptadorMisRutas;
 import desarrollo.sip.senda.objetos.Conexion;
@@ -58,11 +60,15 @@ public class MisRutas extends AppCompatActivity {
         listaMisRutas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.wtf("CC", rutas.get(position).getIdentificador());
+                activiadMapa();
             }
         });
     }
 
+    private void activiadMapa(){
+        Intent i = new Intent(MisRutas.this,MapaActivity.class);
+        startActivity(i);
+    }
 
     private class OnBackMisRutas extends AsyncTask<Boolean,ArrayList<MiRuta>,ArrayList<MiRuta>> {
 
