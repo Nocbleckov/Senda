@@ -20,7 +20,9 @@ import com.google.android.gms.maps.model.LatLng;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
@@ -382,6 +384,36 @@ public class Stuff {
         double xc = ((x1-x2)/2) + x2;
         double yc = ((y1-y2)/2) + y2;
         return new LatLng(xc,yc);
+    }
+
+    public static byte[] toByteArray(Usuario usuario){
+        byte[] temp = null;
+        ByteArrayOutputStream bOs = null;
+        ObjectOutputStream oOs = null;
+        try{
+            bOs = new ByteArrayOutputStream();
+            oOs = new ObjectOutputStream(bOs);
+            oOs.writeObject(usuario);
+            oOs.flush();
+            temp = bOs.toByteArray();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if(bOs != null)try{bOs.close();}catch(Exception e){};
+            if(oOs != null)try{oOs.close();}catch (Exception e){};
+        }
+        return  temp;
+    }
+
+    public static byte[] codificar(byte[] arreglo){
+
+        for(int i = 0;i<arreglo.length;i++){
+            BigInteger temp = new BigInteger(Integer.toBinaryString(arreglo[i]+1),2);
+            arreglo[i] = temp.byteValue();
+        }
+
+        return arreglo;
     }
 
 }

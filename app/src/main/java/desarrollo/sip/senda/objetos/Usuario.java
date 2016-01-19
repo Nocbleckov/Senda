@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.widget.ImageView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,6 +13,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.nio.charset.Charset;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -20,7 +22,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class Usuario extends Stuff implements Parcelable,Serializable {
 
-    private String idUsuario,nombre,idPerfil,estado,url,idBrigada,nick,pass;
+    private String idUsuario,nombre,idPerfil,estado,url,idBrigada;
+    private byte[] bytesNick,bytesPass;
     public byte[] fotoarray;
 
     public Usuario(){
@@ -52,8 +55,8 @@ public class Usuario extends Stuff implements Parcelable,Serializable {
                     this.estado = estado;
                     this.url = fotoUrl;
                     this.idBrigada = idBrigada;
-                    this.nick = nick;
-                    this.pass = pass;
+                    this.bytesNick = Stuff.codificar(nick.getBytes(Charset.forName("UTF-8")));
+                    this.bytesPass = Stuff.codificar(pass.getBytes(Charset.forName("UTF-8")));
 
 
 
@@ -82,9 +85,11 @@ public class Usuario extends Stuff implements Parcelable,Serializable {
         estado = in.readString();
         url = in.readString();
         idBrigada = in.readString();
-        nick = in.readString();
-        pass = in.readString();
-        fotoarray =(byte[]) in.readValue(Usuario.class.getClassLoader());
+        //nick = in.readString();
+        //pass = in.readString();
+        bytesNick =(byte[])in.readValue(Usuario.class.getClassLoader());
+        bytesPass =(byte[])in.readValue(Usuario.class.getClassLoader());
+        fotoarray =(byte[])in.readValue(Usuario.class.getClassLoader());
     }
 
     public static final Creator<Usuario> CREATOR = new Creator<Usuario>() {
@@ -124,15 +129,28 @@ public class Usuario extends Stuff implements Parcelable,Serializable {
     }
 
     public String getNick() {
-        return nick;
+        try{
+            String nick = new String(bytesNick,"UTF-8");
+            return nick;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public String getPass() {
-        return pass;
+        try{
+            String pass = new String(bytesPass,"UTF-8");
+            return pass;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public void  getfoto(CircleImageView circleImageView){
-        new ColocarFoto(circleImageView).execute();
+
+    public void  getfoto(ImageView imageView){
+        new ColocarFoto(imageView).execute();
     }
 
     @Override
@@ -155,8 +173,10 @@ public class Usuario extends Stuff implements Parcelable,Serializable {
         dest.writeString(estado);
         dest.writeString(url);
         dest.writeString(idBrigada);
-        dest.writeString(nick);
-        dest.writeString(pass);
+        //dest.writeString(nick);
+        dest.writeValue(bytesNick);
+        //dest.writeString(pass);
+        dest.writeValue(bytesPass);
         dest.writeValue(fotoarray);
     }
 
@@ -197,10 +217,10 @@ public class Usuario extends Stuff implements Parcelable,Serializable {
     }
 
     private class ColocarFoto extends AsyncTask<String,Void,Bitmap> implements Serializable{
-        CircleImageView circleImageView;
+        ImageView imageView;
 
-        public ColocarFoto(CircleImageView circleImageView){
-            this.circleImageView = circleImageView;
+        public ColocarFoto(ImageView imageView){
+            this.imageView = imageView;
         }
         @Override
         protected Bitmap doInBackground(String... params) {
@@ -211,7 +231,7 @@ public class Usuario extends Stuff implements Parcelable,Serializable {
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
-            circleImageView.setImageBitmap(bitmap);
+            imageView.setImageBitmap(bitmap);
             super.onPostExecute(bitmap);
         }
 

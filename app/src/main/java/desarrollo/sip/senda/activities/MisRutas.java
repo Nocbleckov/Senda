@@ -1,17 +1,21 @@
 package desarrollo.sip.senda.activities;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import desarrollo.sip.senda.R;
 import desarrollo.sip.senda.adaptadores.AdaptadorMisRutas;
 import desarrollo.sip.senda.objetos.Conexion;
@@ -26,6 +30,7 @@ public class MisRutas extends AppCompatActivity {
     private ListView listaMisRutas;
     private Usuario usuario;
     private TextView textUsuario;
+    private ImageView foto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +40,15 @@ public class MisRutas extends AppCompatActivity {
         this.usuario = (Usuario) getIntent().getExtras().get("usuario");
         iniciarWidgets();
         textUsuario.setText(usuario.getNombre());
+        usuario.getfoto(foto);
+
         new OnBackMisRutas().execute();
 
     }
 
     public void iniciarWidgets(){
         textUsuario = (TextView)findViewById(R.id.labelUsario_MisRutas);
+        foto = (ImageView)findViewById(R.id.imagenUsuario_MisRutas);
         listaMisRutas = (ListView)findViewById(R.id.listaMisRutas_MisRutas);
 
     }

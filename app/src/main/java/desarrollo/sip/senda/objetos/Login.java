@@ -1,5 +1,9 @@
 package desarrollo.sip.senda.objetos;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -15,14 +19,14 @@ public class Login implements Serializable {
     private byte[] bytesPass;
     private byte[] bytesSerial;
     private static final long serialVersionUID = 12L;
-    private Usuario usuObj;
+    private byte[] bytesUsuario;
 
 
     public Login(String usuario,String pass,Long serial,Usuario usuObj){
         bytesUsario = codificar(usuario.getBytes(Charset.forName("UTF-8")));
         bytesPass = codificar(pass.getBytes(Charset.forName("UTF-8")));
         bytesSerial = codificar(longToBytes(serial));
-        this.usuObj = usuObj;
+        bytesUsario = Stuff.toByteArray(usuObj);
     }
     private byte[] codificar(byte[] arreglo){
 
@@ -33,6 +37,7 @@ public class Login implements Serializable {
 
         return arreglo;
     }
+
 
     public byte[] longToBytes(long x) {
         ByteBuffer buffer = ByteBuffer.allocate((Long.SIZE / Byte.SIZE) + 10);
@@ -77,7 +82,22 @@ public class Login implements Serializable {
         }
     }
 
-    public Usuario getUsuObj() {
-        return usuObj;
+    public Usuario getUsuarioObject(){
+        Usuario temp = null;
+        ByteArrayInputStream bIs = null;
+        ObjectInputStream oIs = null;
+        try{
+            bIs = new ByteArrayInputStream(bytesUsario);
+            oIs = new ObjectInputStream(bIs);
+            temp =(Usuario)oIs.readObject();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if(bIs!=null)try{bIs.close();}catch(Exception e){}
+            if(oIs!=null)try{oIs.close();}catch(Exception e){}
+        }
+        return temp;
     }
+
 }

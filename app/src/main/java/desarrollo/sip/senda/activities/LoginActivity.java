@@ -91,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                 Login login = cargarArchivo();
                 if(login != null){
                     if(Stuff.decodeLong(login.getID()) == NumSerie.id){
-                        Usuario usuario = login.getUsuObj();
+                        Usuario usuario = login.getUsuarioObject();
                         iniciarSiguiente(usuario);
                     }
                 }else{

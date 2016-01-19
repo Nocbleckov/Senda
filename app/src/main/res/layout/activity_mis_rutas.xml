@@ -22,9 +22,9 @@
         android:layout_marginBottom="12dp"
         />
     <ImageView
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/minfo"
+        android:src="@mipmap/mispuntos"
         android:id="@+id/imagenUsuario_MisRutas"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="12dp"
