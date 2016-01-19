@@ -8,13 +8,14 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="sedatu.com.senda.activities.MisRutas">
+    tools:context="sedatu.com.senda.activities.MisRutas"
+    android:descendantFocusability="blocksDescendants">
 
     <TextView
         android:text="Usuario: "
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:textSize="16sp"
+        android:textSize="22sp"
         android:id="@+id/labelUsario_MisRutas"
         android:layout_toLeftOf="@+id/imagenUsuario_MisRutas"
         android:gravity="center|left"
@@ -33,6 +34,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/imagenUsuario_MisRutas"
         android:id="@+id/listaMisRutas_MisRutas"
+        android:clickable="true"
         />
 
 </RelativeLayout>

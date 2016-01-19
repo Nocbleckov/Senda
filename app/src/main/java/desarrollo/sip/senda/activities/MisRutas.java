@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -40,10 +42,17 @@ public class MisRutas extends AppCompatActivity {
     public void iniciarWidgets(){
         textUsuario = (TextView)findViewById(R.id.labelUsario_MisRutas);
         listaMisRutas = (ListView)findViewById(R.id.listaMisRutas_MisRutas);
+
     }
-    public void cargarLista(ArrayList<MiRuta>rutas){
+    public void cargarLista(final ArrayList<MiRuta>rutas){
         AdaptadorMisRutas adaptadorMisRutas = new AdaptadorMisRutas(getBaseContext(),rutas);
         listaMisRutas.setAdapter(adaptadorMisRutas);
+        listaMisRutas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.wtf("CC", rutas.get(position).getIdentificador());
+            }
+        });
     }
 
 
@@ -60,7 +69,6 @@ public class MisRutas extends AppCompatActivity {
                 conexion.setParametros(parametros);
                 conexion.executar(Conexion.metodoPeticion.POST);
                 String respuesta = conexion.getRespuesta();
-                Log.wtf("RESPUESTA", respuesta);
                 if(Stuff.existe(respuesta)){
                     rutas = Stuff.misRutas(respuesta);
                 }

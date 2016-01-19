@@ -72,7 +72,6 @@ public class MiRuta {
         MenorMayor yS = new MenorMayor(ya[0],ya[ya.length-1]);
 
         LatLng centro = Stuff.puntoCentro(xS.menor,yS.menor,xS.mayor,yS.mayor);
-        Log.wtf("CENTRO",centro.toString());
         return centro;
     }
 

@@ -91,7 +91,6 @@ public class LoginActivity extends AppCompatActivity {
                 Login login = cargarArchivo();
                 if(login != null){
                     if(Stuff.decodeLong(login.getID()) == NumSerie.id){
-                        Log.wtf("Es igual", "aqui va un intent");
                         Usuario usuario = login.getUsuObj();
                         iniciarSiguiente(usuario);
                     }
@@ -189,7 +188,6 @@ public class LoginActivity extends AppCompatActivity {
             if(usuario != null){;
                 Login login = new Login(usuario.getNick(),usuario.getPass(), NumSerie.id,usuario);
                 generarLogueo(login,usuario.getNick());
-                Log.wtf("usu_antes",usuario.clase().toString());
                 iniciarSiguiente(usuario);
             }else{
                 Toast.makeText(context,"El usuario o la contraseña son incorrectas", Toast.LENGTH_SHORT).show();

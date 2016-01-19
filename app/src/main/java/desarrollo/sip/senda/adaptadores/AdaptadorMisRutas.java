@@ -1,11 +1,13 @@
 package desarrollo.sip.senda.adaptadores;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -31,22 +33,37 @@ public class AdaptadorMisRutas extends ArrayAdapter<MiRuta> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        View rowView = null;
+        LinearLayout linearLayout = null;
 
-        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.adaptador_mis_rutas,parent,false);
+        if(convertView == null){
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            rowView = inflater.inflate(R.layout.adaptador_mis_rutas, parent, false);
+            linearLayout = (LinearLayout)rowView.findViewById(R.id.linearLytHorizontal_AdaptadorMisRutas);
+            rowView.setTag(linearLayout);
+        }else{
+            linearLayout = (LinearLayout)convertView.getTag();
+        }
+
+
 
         TextView identificador = (TextView)rowView.findViewById(R.id.labelIdentificador_AdaptadorMisRutas);
-        TextView siglas = (TextView)rowView.findViewById(R.id.labelSiglas_AdaptadorMisRutas);
-        TextView municipio = (TextView)rowView.findViewById(R.id.labelMunicipio_AdaptadorMisRutas);
-        TextView estado = (TextView)rowView.findViewById(R.id.labelEstado_AdaptadorMisRutas);
+        TextView siglas = (TextView)linearLayout.findViewById(R.id.labelSiglas_AdaptadorMisRutas);
+        TextView municipio = (TextView)linearLayout.findViewById(R.id.labelMunicipio_AdaptadorMisRutas);
+        TextView estado = (TextView)linearLayout.findViewById(R.id.labelEstado_AdaptadorMisRutas);
         ImageView imagen = (ImageView)rowView.findViewById(R.id.imagenRegionMapa_AdaptadorMisRutas);
 
         rutas.get(position).getfoto(imagen);
         identificador.setText(rutas.get(position).getIdentificador());
-        siglas.setText("Siglas: "+rutas.get(position).getSiglas());
-        municipio.setText("Municipio: "+rutas.get(position).getMunicipio());
-        estado.setText("Estado: "+rutas.get(position).getEstado());
+        linearLayout.removeAllViews();
+        siglas.setText("Siglas: " + rutas.get(position).getSiglas());
+        municipio.setText("Municipio: " + rutas.get(position).getMunicipio());
+        estado.setText("Estado: " + rutas.get(position).getEstado());
+        linearLayout.addView(siglas);
+        linearLayout.addView(municipio);
+        linearLayout.addView(estado);
+        rowView.setTag(linearLayout);
 
         return rowView;
     }
