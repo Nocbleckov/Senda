@@ -3,6 +3,8 @@ package desarrollo.sip.senda.objetos;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -13,30 +15,65 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import desarrollo.sip.senda.activities.MisRutas;
 
 /**
  * Created by DESARROLLO on 16/01/16.
  */
-public class MiRuta {
+public class MiRuta implements Parcelable,Serializable {
     private String identificador,siglas,municipio,estado,idRuta;
     private List<LatLng> puntos;
+    private LatLng puntoCentro;
     private byte[] imagenCode;
+    private ArrayList<Punto>destinos;
+
 
     public MiRuta(String siglas,String municipio,String estado,String idRuta,String cadenaRuta){
         iniPuntos(cadenaRuta);
         this.idRuta = idRuta;
+        new OnBackMisDestinos().execute();
         this.siglas = siglas;
         this.municipio = municipio;
         this.estado = estado;
         this.identificador = idRuta+"_"+siglas+"_"+estado;
+        centro();
         new onBackImagen(cadenaRuta).execute();
     }
 
+    public MiRuta(Parcel in){
+        identificador = in.readString();
+        siglas = in.readString();
+        municipio = in.readString();
+        estado = in.readString();
+        idRuta = in.readString();
+        puntos = (List<LatLng>)in.readValue(MiRuta.class.getClassLoader());
+        imagenCode = (byte[])in.readValue(MiRuta.class.getClassLoader());
+        puntoCentro = (LatLng)in.readValue(MiRuta.class.getClassLoader());
+        destinos = (ArrayList<Punto>)in.readValue(MiRuta.class.getClassLoader());
+    }
+
+    public static final Creator<MiRuta> CREATOR = new Creator<MiRuta>() {
+        @Override
+        public MiRuta createFromParcel(Parcel source) {
+            return new MiRuta(source);
+        }
+
+        @Override
+        public MiRuta[] newArray(int size) {
+            return new MiRuta[size];
+        }
+    };
+
     public void iniPuntos(String cadena){
         this.puntos = PolyUtil.decode(cadena);
+    }
+
+    public void setDestinos(ArrayList<Punto> destinos) {
+        this.destinos = destinos;
     }
 
     public String getIdentificador() {
@@ -55,11 +92,23 @@ public class MiRuta {
         return estado;
     }
 
+    public List<LatLng> getPuntos() {
+        return puntos;
+    }
+
     public void  getfoto(ImageView imageView){
         new ColocarFoto(imageView).execute();
     }
 
-    private LatLng centro(){
+    public LatLng getPuntoCentro() {
+        return puntoCentro ;
+    }
+
+    public ArrayList<Punto> getDestinos() {
+        return destinos;
+    }
+
+    private void centro(){
         ArrayList<Double> x=new ArrayList<>();
         ArrayList<Double> y=new ArrayList<>();
         for(int i = 0;i<puntos.size();i++){
@@ -72,7 +121,25 @@ public class MiRuta {
         MenorMayor yS = new MenorMayor(ya[0],ya[ya.length-1]);
 
         LatLng centro = Stuff.puntoCentro(xS.menor,yS.menor,xS.mayor,yS.mayor);
-        return centro;
+        puntoCentro = centro;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(identificador);
+        dest.writeString(siglas);
+        dest.writeString(municipio);
+        dest.writeString(estado);
+        dest.writeString(idRuta);
+        dest.writeValue(puntos);
+        dest.writeValue(imagenCode);
+        dest.writeValue(puntoCentro);
+        dest.writeValue(destinos);
     }
 
     private class onBackImagen extends AsyncTask<String,Void,Bitmap>{
@@ -82,8 +149,7 @@ public class MiRuta {
         }
         @Override
         protected Bitmap doInBackground(String... params) {
-            LatLng c = centro();
-            String centro = c.latitude+","+c.longitude;
+            String centro = puntoCentro.latitude+","+ puntoCentro.longitude;
 
             String url = "https://maps.googleapis.com/maps/api/staticmap?center="+centro+"&zoom=15&size=800x480&path=weight:5%7Ccolor:blue%7Cenc:"+cadenaRuta+"&key=AIzaSyCN9dweEHH0yQXVVLyuCTxa_Es1Vk0gzJY";
             Bitmap bm = null;
@@ -102,6 +168,28 @@ public class MiRuta {
             }
 
             return bm;
+        }
+    }
+
+    private class OnBackMisDestinos extends AsyncTask<String,String,ArrayList<Punto>>{
+
+        @Override
+        protected ArrayList<Punto> doInBackground(String... params) {
+
+            try{
+                HashMap<String,String> parametros = new HashMap<>();
+                parametros.put("numPeticion", "3");
+                parametros.put("idRuta", idRuta);
+                Conexion conexion = new Conexion("http://sysintpro.com.mx/PruebasApiGoogle/WSSApp/Peticiones.php");
+                conexion.setParametros(parametros);
+                conexion.executar(Conexion.metodoPeticion.POST);
+                String respuesta = conexion.getRespuesta();
+                destinos = Stuff.obtenerPuntos(respuesta);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+
+            return null;
         }
     }
 

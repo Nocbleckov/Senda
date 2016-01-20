@@ -1,12 +1,10 @@
 package desarrollo.sip.senda.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -16,8 +14,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-import desarrollo.sip.senda.MapaActivity;
 import desarrollo.sip.senda.R;
 import desarrollo.sip.senda.adaptadores.AdaptadorMisRutas;
 import desarrollo.sip.senda.objetos.Conexion;
@@ -60,15 +56,17 @@ public class MisRutas extends AppCompatActivity {
         listaMisRutas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                activiadMapa();
+                activiadMapa(rutas.get(position));
             }
         });
     }
 
-    private void activiadMapa(){
+    private void activiadMapa(MiRuta miRuta){
         Intent i = new Intent(MisRutas.this,MapaActivity.class);
+        i.putExtra("miRuta", (Parcelable)miRuta);
         startActivity(i);
     }
+
 
     private class OnBackMisRutas extends AsyncTask<Boolean,ArrayList<MiRuta>,ArrayList<MiRuta>> {
 
