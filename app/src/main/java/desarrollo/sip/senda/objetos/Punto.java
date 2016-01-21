@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
+
 /**
  * Created by DESARROLLO on 03/12/15.
  */
@@ -68,6 +70,11 @@ public class Punto implements Parcelable {
         public Punto[] newArray(int size) {
             return new Punto[size];
         }
+
+        /*public ArrayList<Punto> newArrayList(int size){
+            return new ArrayList<Punto>(size);
+        }*/
+
     };
 
     public void latLng(String lat, String lng) {

@@ -3,14 +3,17 @@ package desarrollo.sip.senda.activities;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -34,6 +37,8 @@ public class MisRutas extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mis_rutas);
+
+        setTitle("Mis Rutas");
 
         this.usuario = (Usuario) getIntent().getExtras().get("usuario");
         iniciarWidgets();
@@ -63,7 +68,8 @@ public class MisRutas extends AppCompatActivity {
 
     private void activiadMapa(MiRuta miRuta){
         Intent i = new Intent(MisRutas.this,MapaActivity.class);
-        i.putExtra("miRuta", (Parcelable)miRuta);
+        Log.wtf("Intent",i.toString());
+        i.putExtra("miRuta",(Parcelable) miRuta);
         startActivity(i);
     }
 

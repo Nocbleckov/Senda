@@ -20,24 +20,24 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by DESARROLLO on 02/12/15.
  */
-public class Usuario extends Stuff implements Parcelable,Serializable {
+public class Usuario extends Stuff implements Parcelable, Serializable {
 
-    private String idUsuario,nombre,idPerfil,estado,url,idBrigada;
-    private byte[] bytesNick,bytesPass;
+    private String idUsuario, nombre, idPerfil, estado, url, idBrigada;
+    private byte[] bytesNick, bytesPass;
     public byte[] fotoarray;
 
-    public Usuario(){
+    public Usuario() {
 
     }
 
-    public Usuario(String data){
+    public Usuario(String data) {
         if (!data.equalsIgnoreCase("")) {
             JSONObject json;
             try {
-                json =  new JSONObject(data);
+                json = new JSONObject(data);
                 JSONArray usuario = json.optJSONArray("usuario");
 
-                for(int i = 0; i<usuario.length();i++){
+                for (int i = 0; i < usuario.length(); i++) {
 
                     JSONObject obj = usuario.getJSONObject(i);
                     String nombre = obj.optString("nombre");
@@ -59,9 +59,8 @@ public class Usuario extends Stuff implements Parcelable,Serializable {
                     this.bytesPass = Stuff.codificar(pass.getBytes(Charset.forName("UTF-8")));
 
 
-
                 }
-                new DescargaFoto(url).execute();
+                //new DescargaFoto(url).execute();
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -75,7 +74,7 @@ public class Usuario extends Stuff implements Parcelable,Serializable {
         this.idPerfil = idPerfil;
         this.estado = estado;
         this.url = url;
-        new DescargaFoto(url).execute();
+        //new DescargaFoto(url).execute();
     }
 
     protected Usuario(Parcel in) {
@@ -87,9 +86,9 @@ public class Usuario extends Stuff implements Parcelable,Serializable {
         idBrigada = in.readString();
         //nick = in.readString();
         //pass = in.readString();
-        bytesNick =(byte[])in.readValue(Usuario.class.getClassLoader());
-        bytesPass =(byte[])in.readValue(Usuario.class.getClassLoader());
-        fotoarray =(byte[])in.readValue(Usuario.class.getClassLoader());
+        bytesNick = (byte[]) in.readValue(Usuario.class.getClassLoader());
+        bytesPass = (byte[]) in.readValue(Usuario.class.getClassLoader());
+        fotoarray = (byte[]) in.readValue(Usuario.class.getClassLoader());
     }
 
     public static final Creator<Usuario> CREATOR = new Creator<Usuario>() {
@@ -129,27 +128,27 @@ public class Usuario extends Stuff implements Parcelable,Serializable {
     }
 
     public String getNick() {
-        try{
-            String nick = new String(bytesNick,"UTF-8");
+        try {
+            String nick = new String(bytesNick, "UTF-8");
             return nick;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
     public String getPass() {
-        try{
-            String pass = new String(bytesPass,"UTF-8");
+        try {
+            String pass = new String(bytesPass, "UTF-8");
             return pass;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
 
-    public void  getfoto(ImageView imageView){
+    public void getfoto(ImageView imageView) {
         new ColocarFoto(imageView).execute();
     }
 
@@ -157,7 +156,7 @@ public class Usuario extends Stuff implements Parcelable,Serializable {
     public String toString() {
         return "Usuario{" +
                 "nombre='" + nombre + '\'' +
-                '}'+getClass().getDeclaringClass();
+                '}' + getClass().getDeclaringClass();
     }
 
     @Override
@@ -180,53 +179,41 @@ public class Usuario extends Stuff implements Parcelable,Serializable {
         dest.writeValue(fotoarray);
     }
 
-    public Class clase(){
-        return DescargaFoto.class;
+    protected byte[] obtenerImagen() {
+        Bitmap foto;
+        String urlDisplay = url;
+        Bitmap bm = null;
+        try {
+
+            InputStream iS = new java.net.URL(urlDisplay).openStream();
+            bm = BitmapFactory.decodeStream(iS);
+            foto = bm;
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            foto.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            fotoarray = stream.toByteArray();
+            stream.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return fotoarray;
     }
 
-    private class DescargaFoto extends AsyncTask<String,Void,Bitmap> implements Serializable{
 
-        String  url;
-
-        public  DescargaFoto(String url){
-            this.url = url;
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... urls) {
-            Bitmap foto;
-            String urlDisplay = url;
-            Bitmap bm = null;
-            try{
-
-                InputStream iS = new java.net.URL(urlDisplay).openStream();
-                bm = BitmapFactory.decodeStream(iS);
-                foto = bm;
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                foto.compress(Bitmap.CompressFormat.PNG,100,stream);
-                fotoarray  =stream.toByteArray();
-                stream.close();
-
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-            return bm;
-        }
-
-
-    }
-
-    private class ColocarFoto extends AsyncTask<String,Void,Bitmap> implements Serializable{
+    private class ColocarFoto extends AsyncTask<String, Void, Bitmap> implements Serializable {
         ImageView imageView;
 
-        public ColocarFoto(ImageView imageView){
+        public ColocarFoto(ImageView imageView) {
             this.imageView = imageView;
         }
+
         @Override
         protected Bitmap doInBackground(String... params) {
+            fotoarray = obtenerImagen();
             int tamaño = fotoarray.length;
-            Bitmap foto = BitmapFactory.decodeByteArray(fotoarray,0,tamaño);
+            Bitmap foto = BitmapFactory.decodeByteArray(fotoarray, 0, tamaño);
             return foto;
+
         }
 
         @Override

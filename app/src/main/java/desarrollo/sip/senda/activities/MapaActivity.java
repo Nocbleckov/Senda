@@ -35,7 +35,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapa);
 
-        ruta =(MiRuta)getIntent().getExtras().get("miRuta");
+        //ruta =(MiRuta)getIntent().getExtras().get("miRuta");
         mapFragment = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
@@ -44,9 +44,9 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap ;
-        mMap.addPolyline(colocarRuta(ruta.getPuntos()));
-        moverCamara(ruta.getPuntoCentro());
-        colocarPuntos(ruta.getDestinos());
+        //mMap.addPolyline(colocarRuta(ruta.getPuntos()));
+       // moverCamara(ruta.getPuntoCentro());
+        //colocarPuntos(ruta.getDestinos());
     }
 
     public PolylineOptions colocarRuta(List<LatLng> puntos){
