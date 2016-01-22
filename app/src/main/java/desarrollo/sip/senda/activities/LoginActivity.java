@@ -65,7 +65,6 @@ public class LoginActivity extends AppCompatActivity {
 
         }else{
             chekedLogueo.setChecked(false);
-            Toast.makeText(this,"Se marca",Toast.LENGTH_SHORT).show();
         }
     }
 
