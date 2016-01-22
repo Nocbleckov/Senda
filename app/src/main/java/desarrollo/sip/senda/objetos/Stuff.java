@@ -105,6 +105,42 @@ public class Stuff {
         return  puntosTemp;
     }
 
+    public static ArrayList<Punto> obtenerPuntosA(JSONArray jsonArray){
+        ArrayList<Punto> puntosTemp =  new ArrayList<Punto>();
+        if(jsonArray != null){
+            JSONObject json;
+            try{
+
+                for (int i = 0; i<jsonArray.length();i++){
+
+                    JSONObject punto = jsonArray.getJSONObject(i);
+                    String idPunto = punto.optString("idPunto");
+                    String direccion = punto.optString("direccion");
+                    String latitud = punto.optString("latitud");
+                    String longitud = punto.optString("longitud");
+                    String numero = punto.optString("numero");
+                    String calle = punto.optString("calle");
+                    String colonia = punto.optString("colonia");
+                    String localidad = punto.optString("localidad");
+                    String municipio = punto.optString("municipio");
+                    String estado = punto.optString("estado");
+                    String pais = punto.optString("pais");
+                    String codigoPostal = punto.optString("codigoPostal");
+                    String referencias = punto.optString("referencias");
+                    String estatus = punto.optString("estatusPunto");
+                    String cadenaRuta = punto.optString("cadenaRuta");
+
+                    Punto puntoTemp = new Punto(referencias, pais, numero,municipio,longitud,localidad, latitud, idPunto,  estatus,  estado, direccion,  colonia, codigoPostal,calle,cadenaRuta);
+                    puntosTemp.add(puntoTemp);
+                }
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return  puntosTemp;
+    }
+
     public static ArrayList<MiRuta> misRutas(String data){
         ArrayList<MiRuta> misRutasTemp = new ArrayList<>() ;
         if(!data.equalsIgnoreCase("")){
@@ -121,8 +157,14 @@ public class Stuff {
                     String siglas = ruta.optString("siglas") ;
                     String municipio = ruta.optString("municipio");
                     String estado  = ruta.optString("estado");
+                    String rutaImagen = ruta.getString("rutaImagen");
+                    JSONArray destinos = ruta.optJSONObject("destinos").optJSONArray("puntos");
+                    ArrayList<Punto> puntos = obtenerPuntosA(destinos);
+                    JSONObject centro = ruta.optJSONObject("centro");
+                    double lat = (double)centro.opt("lat");
+                    double lng = (double)centro.opt("lng");
 
-                    MiRuta rutaTemp = new MiRuta(siglas,municipio,estado,idRuta,cadenaRuta);
+                    MiRuta rutaTemp = new MiRuta(siglas,municipio,estado,idRuta,cadenaRuta,rutaImagen,puntos,new LatLng(lat,lng));
                     misRutasTemp.add(rutaTemp);
                 }
 
