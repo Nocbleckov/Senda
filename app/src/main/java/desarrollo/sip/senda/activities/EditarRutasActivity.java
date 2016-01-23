@@ -25,6 +25,7 @@ import java.util.List;
 
 import desarrollo.sip.senda.R;
 import desarrollo.sip.senda.adaptadores.AdaptadorRutaEditar;
+import desarrollo.sip.senda.listener.ListerEditarRuta;
 import desarrollo.sip.senda.objetos.MiRuta;
 import desarrollo.sip.senda.objetos.Punto;
 
@@ -34,6 +35,7 @@ public class EditarRutasActivity extends AppCompatActivity implements OnMapReady
     private SupportMapFragment mapFragment;
     private ListView listaRutaEditable;
     private MiRuta ruta;
+    private ArrayList<Punto> destinosMostrar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +46,11 @@ public class EditarRutasActivity extends AppCompatActivity implements OnMapReady
         mapFragment.getMapAsync(this);
 
         ruta = (MiRuta) getIntent().getExtras().get("miRuta");
+        destinosMostrar = ruta.getDestinos();
         setTitle("Edición de Ruta");
 
         listaRutaEditable = (ListView)findViewById(R.id.listaRuta_EditarRuta);
-        AdaptadorRutaEditar adaptador = new AdaptadorRutaEditar(this,ruta.getDestinos(),this);
+        AdaptadorRutaEditar adaptador = new AdaptadorRutaEditar(this,destinosMostrar,this);
         listaRutaEditable.setAdapter(adaptador);
 
     }
@@ -56,8 +59,14 @@ public class EditarRutasActivity extends AppCompatActivity implements OnMapReady
     public void onMapReady(GoogleMap googleMap) {
         mMap=googleMap;
         mMap.addPolyline(colocarRuta(ruta.getPuntos()));
+        iniListener((AdaptadorRutaEditar) listaRutaEditable.getAdapter(), destinosMostrar);
         moverCamara(ruta.getPuntoCentro());
         colocarPuntos(ruta.getDestinos());
+    }
+
+    public void iniListener(AdaptadorRutaEditar adaptadorRutaEditar,List<Punto> puntos){
+        ListerEditarRuta listerEditarRuta = new ListerEditarRuta(adaptadorRutaEditar,puntos,this,ruta.getDestinos());
+        mMap.setOnMarkerClickListener(listerEditarRuta);
     }
 
     protected void moverCamara(LatLng latLng) {
