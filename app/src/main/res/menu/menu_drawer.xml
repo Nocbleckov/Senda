@@ -3,13 +3,6 @@
     <group android:checkableBehavior="single">
 
         <item
-            android:id="@+id/misRutas"
-            android:checked="false"
-            android:title="Mis Rutas"
-            android:icon="@mipmap/mispuntos"
-            android:visible="true"
-            />
-        <item
             android:id="@+id/miInfo"
             android:checked="false"
             android:title="Mi Informacion"

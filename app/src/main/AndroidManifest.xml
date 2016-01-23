@@ -32,9 +32,11 @@
         <activity
             android:name=".activities.MisRutas"
             android:configChanges="screenSize|orientation" />
-        <activity android:name=".activities.MapaActivity"
-            android:configChanges="screenSize|orientation"
-            >
+        <activity
+            android:name=".activities.MapaActivity"
+            android:configChanges="screenSize|orientation" >
+        </activity>
+        <activity android:name=".activities.EditarRutasActivity" >
         </activity>
     </application>
 

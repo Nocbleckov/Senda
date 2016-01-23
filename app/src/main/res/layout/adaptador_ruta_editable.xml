@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+
+    >
+
+    <ImageButton
+        android:id="@+id/botonPunto_AdaptadorRutaEdit"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:src="@mipmap/puntoicono"
+        />
+
+    <TextView
+        android:id="@+id/labelPunto_AdaptadorRutaEdit"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_toLeftOf="@+id/botonBorrar_AdaptadorRutaEdit"
+        android:layout_toRightOf="@+id/botonPunto_AdaptadorRutaEdit"
+        android:gravity="center"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:text="Identificador"
+        android:textSize="14dp"
+        />
+
+    <ImageButton
+        android:id="@+id/botonBorrar_AdaptadorRutaEdit"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:layout_alignBaseline="@+id/botonPunto_AdaptadorRutaEdit"
+        android:layout_alignParentRight="true"
+        android:src="@mipmap/delete"
+        />
+
+
+</RelativeLayout>

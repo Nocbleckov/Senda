@@ -28,7 +28,6 @@
                 android:layout_weight="70"
                 tools:context=".MapaActivity" />
 
-
         </RelativeLayout>
 
         <android.support.design.widget.NavigationView

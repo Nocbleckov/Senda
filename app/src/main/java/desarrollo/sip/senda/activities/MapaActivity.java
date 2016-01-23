@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Parcelable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
@@ -37,6 +39,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import desarrollo.sip.senda.R;
+import desarrollo.sip.senda.adaptadores.AdaptadorRutaEditar;
 import desarrollo.sip.senda.objetos.MiRuta;
 import desarrollo.sip.senda.objetos.Punto;
 
@@ -54,13 +57,15 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapa);
 
+        ruta = (MiRuta) getIntent().getExtras().get("miRuta");
         LayoutInflater inflater = LayoutInflater.from(this);
         View cstmAction = inflater.inflate(R.layout.csmactionbar_layout, null);
+
 
         android.support.v7.app.ActionBar bar = getSupportActionBar();
         ImageButton hamButton =(ImageButton)cstmAction.findViewById(R.id.iconoMenu);
 
-        startDrawer(this,this);
+        startDrawer(this, this);
 
         hamButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,7 +84,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
             bar.setDisplayShowCustomEnabled(true);
         }
 
-        ruta = (MiRuta) getIntent().getExtras().get("miRuta");
+
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
@@ -111,14 +116,14 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 drawerLayout.closeDrawers();
                 switch (item.getItemId()) {
-                    case R.id.misRutas:
-
-                        break;
                     case R.id.miInfo:
 
                         break;
                     case R.id.editarRuta:
-
+                        Intent i = new Intent(MapaActivity.this,EditarRutasActivity.class);
+                        i.putExtra("miRuta", (Parcelable) ruta);
+                        startActivity(i);
+                        break;
                     case R.id.guardarMapas:
 
                         break;
@@ -162,10 +167,6 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void moverCamara(LatLng latLng) {
         CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(15).tilt(45).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-        /*mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.moveCamera(CameraUpdateFactory.zoomBy(15));
-        mMap.moveCamera(CameraUpdateFactory);*/
     }
 
     public void colocarPuntos(ArrayList<Punto> destinos) {
