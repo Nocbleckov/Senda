@@ -22,10 +22,10 @@ import desarrollo.sip.senda.objetos.Punto;
  */
 public class AdaptadorRutaEditar extends ArrayAdapter<Punto>{
     Context context;
-    List<Punto> puntos;
+    ArrayList<Punto> puntos;
     EditarRutasActivity editarRutasActivity;
 
-    public AdaptadorRutaEditar(Context context,List<Punto> puntos,EditarRutasActivity editarRutasActivity){
+    public AdaptadorRutaEditar(Context context,ArrayList<Punto> puntos,EditarRutasActivity editarRutasActivity){
         super(context, -1, puntos);
         this.context = context;
         this.puntos = puntos;

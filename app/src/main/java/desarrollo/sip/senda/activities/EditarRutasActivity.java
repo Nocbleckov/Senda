@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Layout;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -35,7 +39,9 @@ public class EditarRutasActivity extends AppCompatActivity implements OnMapReady
     private SupportMapFragment mapFragment;
     private ListView listaRutaEditable;
     private MiRuta ruta;
-    private ArrayList<Punto> destinosMostrar;
+    private ArrayList<Punto> destinosMostrar = new ArrayList<>();
+    private ArrayList<Punto> destinosOrg = new ArrayList<>();
+    private AdaptadorRutaEditar adaptador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,26 +52,53 @@ public class EditarRutasActivity extends AppCompatActivity implements OnMapReady
         mapFragment.getMapAsync(this);
 
         ruta = (MiRuta) getIntent().getExtras().get("miRuta");
-        destinosMostrar = ruta.getDestinos();
+        destinosMostrar.addAll(ruta.getDestinos());
+        destinosOrg = ruta.getDestinos();
         setTitle("Edición de Ruta");
-
-        listaRutaEditable = (ListView)findViewById(R.id.listaRuta_EditarRuta);
-        AdaptadorRutaEditar adaptador = new AdaptadorRutaEditar(this,destinosMostrar,this);
-        listaRutaEditable.setAdapter(adaptador);
-
+        iniLista();
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap=googleMap;
         mMap.addPolyline(colocarRuta(ruta.getPuntos()));
-        iniListener((AdaptadorRutaEditar) listaRutaEditable.getAdapter(), destinosMostrar);
+        iniListener(adaptador, destinosMostrar);
         moverCamara(ruta.getPuntoCentro());
         colocarPuntos(ruta.getDestinos());
     }
 
+    public void iniLista(){
+        listaRutaEditable = (ListView)findViewById(R.id.listaRuta_EditarRuta);
+        adaptador = new AdaptadorRutaEditar(this,destinosMostrar,this);
+        listaRutaEditable.setAdapter(adaptador);
+        View mifooter = ((LayoutInflater)getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE)).inflate(R.layout.footer_layout_button,null,false);
+        listaRutaEditable.addFooterView(mifooter);
+        setOnClickButtons(mifooter);
+    }
+
+    public void setOnClickButtons(View view){
+        Button botonRecargar = (Button)view.findViewById(R.id.botonRecargar_FooteList);
+        Button botonAceptar = (Button)view.findViewById(R.id.botonAceptar_FooterList);
+
+        botonAceptar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        botonRecargar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                destinosMostrar.addAll(ruta.getDestinos());
+                adaptador.notifyDataSetChanged();
+            }
+        });
+
+    }
+
     public void iniListener(AdaptadorRutaEditar adaptadorRutaEditar,List<Punto> puntos){
-        ListerEditarRuta listerEditarRuta = new ListerEditarRuta(adaptadorRutaEditar,puntos,this,ruta.getDestinos());
+        ListerEditarRuta listerEditarRuta = new ListerEditarRuta(adaptadorRutaEditar,puntos,this,destinosOrg);
         mMap.setOnMarkerClickListener(listerEditarRuta);
     }
 

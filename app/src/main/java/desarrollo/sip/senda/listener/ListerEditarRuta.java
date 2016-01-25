@@ -37,7 +37,7 @@ public class ListerEditarRuta implements GoogleMap.OnMarkerClickListener {
         Punto temp = esEste(marker.getTitle());
         agregarItems(temp, marker);
 
-        return false;
+        return true;
     }
 
     public Punto esEste(String title) {
