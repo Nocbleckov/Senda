@@ -74,6 +74,14 @@ public class MiRuta implements Parcelable,Serializable {
         this.foto = foto;
     }
 
+    public void setCadenaRuta(String cadenaRuta) {
+        this.cadenaRuta = cadenaRuta;
+    }
+
+    public String getCadenaRuta() {
+        return cadenaRuta;
+    }
+
     public Bitmap getFoto() {
         return foto;
     }

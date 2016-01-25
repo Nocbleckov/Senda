@@ -1,6 +1,5 @@
 package desarrollo.sip.senda.activities;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,20 +9,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toolbar;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -31,19 +25,20 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import desarrollo.sip.senda.R;
-import desarrollo.sip.senda.adaptadores.AdaptadorRutaEditar;
+import desarrollo.sip.senda.listener.ChangeDataMap;
+import desarrollo.sip.senda.listener.IniDataMap;
 import desarrollo.sip.senda.objetos.MiRuta;
 import desarrollo.sip.senda.objetos.Punto;
+import desarrollo.sip.senda.objetos.Stuff;
 
-public class MapaActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapaActivity extends AppCompatActivity implements OnMapReadyCallback,Serializable {
 
     private GoogleMap mMap;
     private SupportMapFragment mapFragment;
@@ -95,11 +90,18 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
         mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(19.3910038, -99.2836967)));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(12));
-        mMap.addPolyline(colocarRuta(ruta.getPuntos()));
+        IniDataMap.initDataMap(ruta, mMap);
+        ChangeDataMap.setmMap(mMap);
+    }
 
-        colocarPuntos(ruta.getDestinos());
-        moverCamara(ruta.getPuntoCentro());
-
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.wtf("OnRESTART",ruta.toString());
+        if(!ruta.getCadenaRuta().equals(ChangeDataMap.getRuta().getCadenaRuta())){
+            this.ruta = ChangeDataMap.getRuta();
+            IniDataMap.initDataMap(this.ruta,mMap);
+        }
     }
 
     public void startDrawer(final Context context, final MapaActivity mapaActivity) {
@@ -153,27 +155,6 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
-    }
-
-    public PolylineOptions colocarRuta(List<LatLng> puntos) {
-        PolylineOptions polylineOptions = null;
-        polylineOptions = new PolylineOptions();
-        polylineOptions.addAll(puntos);
-        polylineOptions.width(8);
-        polylineOptions.color(Color.argb(150, 80, 190, 160));
-        return polylineOptions;
-    }
-
-    public void moverCamara(LatLng latLng) {
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(15).tilt(45).build();
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-    }
-
-    public void colocarPuntos(ArrayList<Punto> destinos) {
-        for (int i = 0; i < destinos.size(); i++) {
-            LatLng temp = destinos.get(i).getCoordenada();
-            Marker marcaTemp = mMap.addMarker(new MarkerOptions().position(temp).title(destinos.get(i).getDireccion()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-        }
     }
 
 

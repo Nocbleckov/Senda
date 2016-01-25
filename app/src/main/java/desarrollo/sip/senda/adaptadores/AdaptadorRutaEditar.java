@@ -9,12 +9,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.GoogleMap;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.Inflater;
 
 import desarrollo.sip.senda.R;
 import desarrollo.sip.senda.activities.EditarRutasActivity;
+import desarrollo.sip.senda.listener.IniDataMap;
 import desarrollo.sip.senda.objetos.Punto;
 
 /**
@@ -23,13 +26,13 @@ import desarrollo.sip.senda.objetos.Punto;
 public class AdaptadorRutaEditar extends ArrayAdapter<Punto>{
     Context context;
     ArrayList<Punto> puntos;
-    EditarRutasActivity editarRutasActivity;
+    GoogleMap mMap;
 
-    public AdaptadorRutaEditar(Context context,ArrayList<Punto> puntos,EditarRutasActivity editarRutasActivity){
+    public AdaptadorRutaEditar(Context context,ArrayList<Punto> puntos,GoogleMap mMap){
         super(context, -1, puntos);
         this.context = context;
         this.puntos = puntos;
-        this.editarRutasActivity = editarRutasActivity;
+        this.mMap = mMap;
     }
 
     @Override
@@ -48,7 +51,7 @@ public class AdaptadorRutaEditar extends ArrayAdapter<Punto>{
         botonPunto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                editarRutasActivity.centrarCamara(puntos.get(position).getCoordenada(),18,48);
+                IniDataMap.centrarCamara(puntos.get(position).getCoordenada(),18,48,mMap);
             }
         });
 
