@@ -38,6 +38,8 @@
         </activity>
         <activity android:name=".activities.EditarRutasActivity" >
         </activity>
+        <activity android:name=".activities.DetallesPuntoActivity" >
+        </activity>
     </application>
 
 </manifest>

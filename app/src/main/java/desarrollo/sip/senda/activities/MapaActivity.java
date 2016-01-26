@@ -34,6 +34,7 @@ import java.util.List;
 import desarrollo.sip.senda.R;
 import desarrollo.sip.senda.listener.ChangeDataMap;
 import desarrollo.sip.senda.listener.IniDataMap;
+import desarrollo.sip.senda.listener.ListenerMarkers;
 import desarrollo.sip.senda.objetos.MiRuta;
 import desarrollo.sip.senda.objetos.Punto;
 import desarrollo.sip.senda.objetos.Stuff;
@@ -90,6 +91,9 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
         mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(19.3910038, -99.2836967)));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(12));
+
+        ListenerMarkers listenerMarkers = new ListenerMarkers(ruta.getDestinos(),this);
+        mMap.setOnMarkerClickListener(listenerMarkers);
         IniDataMap.initDataMap(ruta, mMap);
         ChangeDataMap.setmMap(mMap);
     }
@@ -97,10 +101,12 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.wtf("OnRESTART",ruta.toString());
-        if(!ruta.getCadenaRuta().equals(ChangeDataMap.getRuta().getCadenaRuta())){
-            this.ruta = ChangeDataMap.getRuta();
-            IniDataMap.initDataMap(this.ruta,mMap);
+        drawerLayout.closeDrawer(Gravity.LEFT);
+        if(ChangeDataMap.getRuta() != null){
+            if (!ruta.getCadenaRuta().equals(ChangeDataMap.getRuta().getCadenaRuta())) {
+                this.ruta = ChangeDataMap.getRuta();
+                IniDataMap.initDataMap(this.ruta, mMap);
+            }
         }
     }
 

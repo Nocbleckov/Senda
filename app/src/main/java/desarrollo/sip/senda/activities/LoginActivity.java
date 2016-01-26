@@ -3,6 +3,9 @@ package desarrollo.sip.senda.activities;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -34,10 +37,12 @@ import desarrollo.sip.senda.serial.NumSerie;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText editUsuario,editPass;
-    Button botonIngresar,botonLimpiar;
-    CheckedTextView chekedLogueo;
-    Dialog dialog;
+    private EditText editUsuario,editPass;
+    private Button botonIngresar,botonLimpiar;
+    private CheckedTextView chekedLogueo;
+    private Dialog dialog;
+    private ConnectivityManager cm;
+    private NetworkInfo miWifi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +51,9 @@ public class LoginActivity extends AppCompatActivity {
         setTitle("Bienvenido");
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         iniciarWidgets();
+
+        cm = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
+
 
     }
 
@@ -69,13 +77,22 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onClickIngresar(View view){
-        String usuario = editUsuario.getText().toString().trim();
-        String pass = editPass.getText().toString().trim();
-        if(!usuario.equalsIgnoreCase("") || !pass.equalsIgnoreCase("")) {
-            new onBackLogin(this).execute(usuario, pass, "123456789");
+
+        miWifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        if(miWifi.getState() == NetworkInfo.State.CONNECTED){
+
+            String usuario = editUsuario.getText().toString().trim();
+            String pass = editPass.getText().toString().trim();
+            if (!usuario.equalsIgnoreCase("") || !pass.equalsIgnoreCase("")) {
+                new onBackLogin(this).execute(usuario, pass, "123456789");
+            } else {
+                Toast.makeText(this, "Los campos de usuario y contraseña no pueden estar vacíos", Toast.LENGTH_SHORT).show();
+            }
         }else{
-            Toast.makeText(this,"Los campos de usuario y contraseña no pueden estar vacíos",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No esta conectado a una Red", Toast.LENGTH_SHORT).show();
         }
+
     }
 
     public void onClickLimpiar(View view){

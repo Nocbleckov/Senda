@@ -67,7 +67,7 @@ public class Stuff {
     }
 
 
-    public static ArrayList<Punto> obtenerPuntos(String data){
+    /*public static ArrayList<Punto> obtenerPuntos(String data){
         ArrayList<Punto> puntosTemp =  new ArrayList<Punto>();
         if(!data.equalsIgnoreCase("")){
             JSONObject json;
@@ -103,7 +103,7 @@ public class Stuff {
             }
         }
         return  puntosTemp;
-    }
+    }*/
 
     public static ArrayList<Punto> obtenerPuntosA(JSONArray jsonArray){
         ArrayList<Punto> puntosTemp =  new ArrayList<Punto>();
@@ -129,8 +129,9 @@ public class Stuff {
                     String referencias = punto.optString("referencias");
                     String estatus = punto.optString("estatusPunto");
                     String cadenaRuta = punto.optString("cadenaRuta");
+                    String rutaImagen = punto.optString("rutaImagen");
 
-                    Punto puntoTemp = new Punto(referencias, pais, numero,municipio,longitud,localidad, latitud, idPunto,  estatus,  estado, direccion,  colonia, codigoPostal,calle,cadenaRuta);
+                    Punto puntoTemp = new Punto(referencias, pais, numero,municipio,longitud,localidad, latitud, idPunto,  estatus,  estado, direccion,  colonia, codigoPostal,calle,cadenaRuta,rutaImagen);
                     puntosTemp.add(puntoTemp);
                 }
 

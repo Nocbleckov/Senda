@@ -97,7 +97,7 @@ public class AdaptadorMisRutas extends ArrayAdapter<MiRuta> {
 
         private Bitmap cargarFoto(File archivo) {
             Bitmap bm = null;
-            ByteArrayOutputStream buffer= null;
+            ByteArrayOutputStream buffer = null;
             try {
                 InputStream fIs = new FileInputStream(archivo);
                 buffer = new ByteArrayOutputStream();

@@ -1,25 +1,31 @@
 package desarrollo.sip.senda.objetos;
 
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.File;
 import java.util.ArrayList;
+
+import desarrollo.sip.senda.abstractClass.WithImage;
+
 
 /**
  * Created by DESARROLLO on 03/12/15.
  */
-public class Punto implements Parcelable {
+public class Punto extends WithImage implements Parcelable {
 
-    private String referencias, pais, numero, municipio, longitud, localidad, latitud, idPunto, idAccion, estatus, estado, direccion, colonia, codigoPostal, calle,cadenaRuta;
+    private String referencias, pais, numero, municipio, localidad, idAccion, estatus, estado, direccion, colonia, codigoPostal, calle,cadenaRuta;
     private LatLng coordenada;
 
     public Punto() {
 
     }
 
-    public Punto(String referencias, String pais, String numero, String municipio, String longitud, String localidad, String latitud, String idPunto, String estatus, String estado, String direccion, String colonia, String codigoPostal, String calle, String cadenaRuta) {
+    public Punto(String referencias, String pais, String numero, String municipio, String longitud, String localidad, String latitud, String idPunto, String estatus, String estado, String direccion, String colonia, String codigoPostal, String calle, String cadenaRuta,String rutaImagen) {
         this.referencias = referencias;
         this.pais = pais;
         this.numero = numero;
@@ -27,7 +33,7 @@ public class Punto implements Parcelable {
         this.longitud = longitud;
         this.localidad = localidad;
         this.latitud = latitud;
-        this.idPunto = idPunto;
+        this.id = idPunto;
         this.idAccion = idAccion;
         this.estatus = estatus;
         this.estado = estado;
@@ -36,6 +42,7 @@ public class Punto implements Parcelable {
         this.codigoPostal = codigoPostal;
         this.calle = calle;
         this.cadenaRuta = cadenaRuta;
+        this.rutaImagen = rutaImagen;
         latLng(latitud, longitud);
     }
 
@@ -47,7 +54,7 @@ public class Punto implements Parcelable {
         longitud = in.readString();
         localidad = in.readString();
         latitud = in.readString();
-        idPunto = in.readString();
+        id = in.readString();
         idAccion = in.readString();
         estatus = in.readString();
         estado = in.readString();
@@ -56,6 +63,7 @@ public class Punto implements Parcelable {
         codigoPostal = in.readString();
         calle = in.readString();
         cadenaRuta = in.readString();
+        rutaImagen = in.readString();
         //coordenada = in.readParcelable(LatLng.class.getClassLoader());
         coordenada =(LatLng) in.readValue(LatLng.class.getClassLoader());
     }
@@ -123,7 +131,7 @@ public class Punto implements Parcelable {
     }
 
     public String getIdPunto() {
-        return idPunto;
+        return id;
     }
 
     public String getIdAccion() {
@@ -193,7 +201,7 @@ public class Punto implements Parcelable {
         dest.writeString(longitud);
         dest.writeString(localidad);
         dest.writeString(latitud);
-        dest.writeString(idPunto);
+        dest.writeString(id);
         dest.writeString(idAccion);
         dest.writeString(estatus);
         dest.writeString(estado);
@@ -202,6 +210,8 @@ public class Punto implements Parcelable {
         dest.writeString(codigoPostal);
         dest.writeString(calle);
         dest.writeString(cadenaRuta);
+        dest.writeString(rutaImagen);
         dest.writeValue(coordenada);
     }
+
 }
