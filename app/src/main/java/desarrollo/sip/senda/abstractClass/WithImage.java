@@ -10,31 +10,25 @@ import desarrollo.sip.senda.objetos.Stuff;
  */
 public abstract class WithImage implements Serializable {
 
-    protected String longitud,latitud, id,rutaImagen;
+    protected String longitud, latitud, id, rutaImagen;
     protected byte[] imagenCode;
     private File archivo;
-
-    public WithImage(){
-        archivo = new File(Stuff.crearRuta("/senda/data")+"/"+id+latitud+","+longitud);
-    }
 
     public String getRutaImagen() {
         return rutaImagen;
     }
 
-    public boolean existeImagen(){
-        if(archivo.exists()){
+    public boolean existeImagen() {
+        this.archivo = new File(Stuff.crearRuta("/senda/data") + "/" + id + latitud + "|" + longitud);
+        if (archivo.exists()) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
-    public File getRutaInternaImagen(){
-        if(archivo.exists()){
-            return  archivo;
-        }else{
-            return null;
-        }
+
+    public File getRutaInternaImagen() {
+        return archivo;
     }
 
     public void setImagenCode(byte[] imagenCode) {

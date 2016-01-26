@@ -70,7 +70,10 @@ public class OnBackColocarImagen extends AsyncTask<String, Bitmap, Bitmap> {
         Bitmap bm = null;
         try {
             archivo.createNewFile();
-            InputStream iS = new URL(withImage.getRutaImagen()).openStream();
+
+            String ruta = withImage.getRutaImagen();
+
+            InputStream iS = new URL(ruta).openStream();
             bm = BitmapFactory.decodeStream(iS);
             FileOutputStream fOs = new FileOutputStream(archivo, false);
             bm.compress(Bitmap.CompressFormat.PNG, 100, fOs);
@@ -91,7 +94,8 @@ public class OnBackColocarImagen extends AsyncTask<String, Bitmap, Bitmap> {
             if (withImage.existeImagen()) {
                 bm = cargarFoto(withImage.getRutaInternaImagen());
             } else {
-                bm = crearFoto(withImage.getRutaInternaImagen());
+                File a = withImage.getRutaInternaImagen();
+                bm = crearFoto(a);
             }
             withImage.setImagenCode(bitmapToByteArray(bm));
         }else{

@@ -18,7 +18,7 @@ import desarrollo.sip.senda.abstractClass.WithImage;
  */
 public class Punto extends WithImage implements Parcelable {
 
-    private String referencias, pais, numero, municipio, localidad, idAccion, estatus, estado, direccion, colonia, codigoPostal, calle,cadenaRuta;
+    private String referencias, pais, numero, municipio, localidad, idAccion, estatus, estado, direccion, colonia, codigoPostal, calle,cadenaRuta,rutaImagen;
     private LatLng coordenada;
 
     public Punto() {

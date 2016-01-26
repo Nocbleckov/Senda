@@ -50,7 +50,7 @@ public class DetallesPuntoActivity extends Activity {
         estado.setText(punto.getEstado());
         codigoPostal.setText(punto.getCodigoPostal());
         estatus.setText(punto.getEstatus());
-        new OnBackColocarImagen(punto,puntoImagen).execute();
+        //new OnBackColocarImagen(punto,puntoImagen).execute();
     }
 
 }
