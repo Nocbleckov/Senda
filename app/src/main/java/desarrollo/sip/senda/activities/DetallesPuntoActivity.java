@@ -1,7 +1,10 @@
 package desarrollo.sip.senda.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -11,7 +14,9 @@ import android.widget.TextView;
 
 import desarrollo.sip.senda.OnBackTasks.OnBackColocarImagen;
 import desarrollo.sip.senda.R;
+import desarrollo.sip.senda.listener.ListenerLocation;
 import desarrollo.sip.senda.objetos.Punto;
+import desarrollo.sip.senda.objetos.Usuario;
 
 public class DetallesPuntoActivity extends Activity {
 
@@ -24,8 +29,10 @@ public class DetallesPuntoActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalles_punto);
         Punto punto = (Punto)getIntent().getExtras().get("punto");
+        Usuario usuario = (Usuario)getIntent().getExtras().get("usuario");
         iniWidgets();
         colocarInfo(punto);
+        cercania(punto,usuario.getIdUsuario());
     }
 
     public void iniWidgets(){
@@ -50,7 +57,20 @@ public class DetallesPuntoActivity extends Activity {
         estado.setText(punto.getEstado());
         codigoPostal.setText(punto.getCodigoPostal());
         estatus.setText(punto.getEstatus());
-        //new OnBackColocarImagen(punto,puntoImagen).execute();
+        new OnBackColocarImagen(punto,puntoImagen).execute();
+    }
+
+    public void cercania(Punto punto,String idUsuario){
+
+        LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        LocationListener listener = new ListenerLocation(this,punto,DetallesPuntoActivity.this,getCurrentFocus(),idUsuario,locationManager);
+
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 50, 0, listener);
+        } else {
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 50, 0, listener);
+        }
+
     }
 
 }

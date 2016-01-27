@@ -30,7 +30,7 @@
                 android:text="2DA PRIVADA JOSE REYES MARTINEZ 111, Aguascalientes, Aguascalientes, México"
                 android:id="@+id/textDireccionCompleta_DetallesPunto"
                 android:gravity="right"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -38,13 +38,12 @@
                 android:background="#535353"
                 android:padding="5dp"
                 android:layout_marginTop="14dp"
+                android:layout_marginBottom="5dp"
                 />
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="300px"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="12dp"
                 android:id="@+id/imagenPunto_DetallesPunto"
                 android:layout_below="@id/textDireccionCompleta_DetallesPunto"
                 />
@@ -224,6 +223,7 @@
 
                     <Button
                         android:text="Iniciar Encuesta"
+                        android:id="@+id/botonIniciarEncuesta_DetallesPunto"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/textEstatus_DetallesPunto"

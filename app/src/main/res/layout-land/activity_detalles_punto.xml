@@ -217,6 +217,7 @@
                     
                     <Button
                         android:text="Iniciar Encuesta"
+                        android:id="@+id/botonIniciarEncuesta_DetallesPunto"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/textEstatus_DetallesPunto"

@@ -18,7 +18,7 @@ import desarrollo.sip.senda.abstractClass.WithImage;
  */
 public class Punto extends WithImage implements Parcelable {
 
-    private String referencias, pais, numero, municipio, localidad, idAccion, estatus, estado, direccion, colonia, codigoPostal, calle,cadenaRuta,rutaImagen;
+    private String referencias, pais, numero, municipio, localidad, idAccion, estatus, estado, direccion, colonia, codigoPostal, calle,cadenaRuta;
     private LatLng coordenada;
 
     public Punto() {
@@ -66,6 +66,7 @@ public class Punto extends WithImage implements Parcelable {
         rutaImagen = in.readString();
         //coordenada = in.readParcelable(LatLng.class.getClassLoader());
         coordenada =(LatLng) in.readValue(LatLng.class.getClassLoader());
+        imagenCode = (byte[]) in.readValue(Punto.class.getClassLoader());
     }
 
     public static final Creator<Punto> CREATOR = new Creator<Punto>() {
@@ -212,6 +213,7 @@ public class Punto extends WithImage implements Parcelable {
         dest.writeString(cadenaRuta);
         dest.writeString(rutaImagen);
         dest.writeValue(coordenada);
+        dest.writeByteArray(imagenCode);
     }
 
 }

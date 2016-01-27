@@ -21,6 +21,7 @@ public class ListenerMarkers implements OnMarkerClickListener {
 
     ArrayList<Punto> puntos;
     Context context;
+    Usuario usuario;
     String  idUsuario;
     MapaActivity mapaActivity;
 
@@ -31,9 +32,10 @@ public class ListenerMarkers implements OnMarkerClickListener {
         this.mapaActivity = mapaActivity;
     }
 
-    public ListenerMarkers(ArrayList<Punto> puntos, Context context){
+    public ListenerMarkers(ArrayList<Punto> puntos, Context context,Usuario usuario){
         this.puntos = puntos;
         this.context = context ;
+        this.usuario = usuario;
     }
 
     @Override
@@ -42,7 +44,7 @@ public class ListenerMarkers implements OnMarkerClickListener {
         Intent i = new Intent(context,DetallesPuntoActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         i.putExtra("punto",(Parcelable)punto);
-        i.putExtra("idUsuario",idUsuario);
+        i.putExtra("usuario",(Parcelable)usuario);
         context.startActivity(i);
         return false;
     }

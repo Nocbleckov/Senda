@@ -2,6 +2,7 @@ package desarrollo.sip.senda.OnBackTasks;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageButton;
@@ -15,6 +16,7 @@ import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.net.URL;
 
+import desarrollo.sip.senda.R;
 import desarrollo.sip.senda.abstractClass.WithImage;
 import desarrollo.sip.senda.objetos.Punto;
 import desarrollo.sip.senda.objetos.Stuff;
@@ -46,10 +48,10 @@ public class OnBackColocarImagen extends AsyncTask<String, Bitmap, Bitmap> {
             }
             buffer.flush();
             byte[] imagenCode = buffer.toByteArray();
-            fIs.close();
-            buffer.close();
             int tamaño = imagenCode.length;
             bm = BitmapFactory.decodeByteArray(imagenCode, 0, tamaño);
+            fIs.close();
+            buffer.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -83,6 +85,7 @@ public class OnBackColocarImagen extends AsyncTask<String, Bitmap, Bitmap> {
             fOs.close();
         } catch (Exception e) {
             e.printStackTrace();
+            archivo.delete();
         }
         return bm;
     }
@@ -90,7 +93,7 @@ public class OnBackColocarImagen extends AsyncTask<String, Bitmap, Bitmap> {
     @Override
     protected Bitmap doInBackground(String... params) {
         Bitmap bm = null;
-        if (withImage.getImagenCode() == null) {
+
             if (withImage.existeImagen()) {
                 bm = cargarFoto(withImage.getRutaInternaImagen());
             } else {
@@ -98,10 +101,7 @@ public class OnBackColocarImagen extends AsyncTask<String, Bitmap, Bitmap> {
                 bm = crearFoto(a);
             }
             withImage.setImagenCode(bitmapToByteArray(bm));
-        }else{
-            int tamaño = withImage.getImagenCode().length;
-            bm = BitmapFactory.decodeByteArray(withImage.getImagenCode(),0,tamaño);
-        }
+
         return bm;
     }
 
@@ -110,6 +110,7 @@ public class OnBackColocarImagen extends AsyncTask<String, Bitmap, Bitmap> {
         super.onPostExecute(bitmap);
         if(bitmap != null){
             imageView.setImageBitmap(bitmap);
+            imageView.setBackgroundResource(R.drawable.degradado);
         }
     }
 }

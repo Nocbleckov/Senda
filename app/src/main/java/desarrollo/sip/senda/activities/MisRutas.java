@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,6 +21,7 @@ import java.util.HashMap;
 
 import desarrollo.sip.senda.R;
 import desarrollo.sip.senda.adaptadores.AdaptadorMisRutas;
+import desarrollo.sip.senda.adaptadores.AdaptadorRecyclerVMisRutas;
 import desarrollo.sip.senda.objetos.Conexion;
 import desarrollo.sip.senda.objetos.MiRuta;
 import desarrollo.sip.senda.objetos.Stuff;
@@ -28,10 +31,11 @@ import desarrollo.sip.senda.objetos.Usuario;
 
 public class MisRutas extends AppCompatActivity {
 
-    private ListView listaMisRutas;
+    //private ListView listaMisRutas;
     private Usuario usuario;
     private TextView textUsuario;
     private ImageView foto;
+    private RecyclerView recyclerMisRutas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,24 +56,33 @@ public class MisRutas extends AppCompatActivity {
     public void iniciarWidgets(){
         textUsuario = (TextView)findViewById(R.id.labelUsario_MisRutas);
         foto = (ImageView)findViewById(R.id.imagenUsuario_MisRutas);
-        listaMisRutas = (ListView)findViewById(R.id.listaMisRutas_MisRutas);
+        recyclerMisRutas = (RecyclerView)findViewById(R.id.recyclerVMiRuta_MisRutas);
+        //listaMisRutas = (ListView)findViewById(R.id.listaMisRutas_MisRutas);
 
     }
     public void cargarLista(final ArrayList<MiRuta>rutas){
         AdaptadorMisRutas adaptadorMisRutas = new AdaptadorMisRutas(getBaseContext(),rutas);
-        listaMisRutas.setAdapter(adaptadorMisRutas);
-        listaMisRutas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        //listaMisRutas.setAdapter(adaptadorMisRutas);
+        /*listaMisRutas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 activiadMapa(rutas.get(position));
             }
-        });
+        });*/
     }
 
-    private void activiadMapa(MiRuta miRuta){
+    public void cargarRecyclerView(ArrayList<MiRuta> rutas){
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getBaseContext());
+        recyclerMisRutas.setLayoutManager(layoutManager);
+        AdaptadorRecyclerVMisRutas adaptadorRecyclerVMisRutas = new AdaptadorRecyclerVMisRutas(rutas,this);
+        recyclerMisRutas.setAdapter(adaptadorRecyclerVMisRutas);
+    }
+
+    public void activiadMapa(MiRuta miRuta){
         Intent i = new Intent(MisRutas.this,MapaActivity.class);
         Log.wtf("Intent",i.toString());
-        i.putExtra("miRuta",(Parcelable) miRuta);
+        i.putExtra("miRuta", (Parcelable) miRuta);
+        i.putExtra("usuario",(Parcelable) usuario);
         startActivity(i);
     }
 
@@ -101,7 +114,9 @@ public class MisRutas extends AppCompatActivity {
         protected void onPostExecute(ArrayList<MiRuta> rutas) {
             super.onPostExecute(rutas);
             if(rutas != null){
-                cargarLista(rutas);
+                //cargarLista(rutas);
+                cargarRecyclerView(rutas
+                );
             }
         }
     }

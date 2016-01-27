@@ -38,6 +38,7 @@ import desarrollo.sip.senda.listener.ListenerMarkers;
 import desarrollo.sip.senda.objetos.MiRuta;
 import desarrollo.sip.senda.objetos.Punto;
 import desarrollo.sip.senda.objetos.Stuff;
+import desarrollo.sip.senda.objetos.Usuario;
 
 public class MapaActivity extends AppCompatActivity implements OnMapReadyCallback,Serializable {
 
@@ -47,6 +48,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
     private DrawerLayout drawerLayout;
     private MiRuta ruta;
     private boolean estado = false;
+    private Usuario usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_mapa);
 
         ruta = (MiRuta) getIntent().getExtras().get("miRuta");
+        usuario = (Usuario)getIntent().getExtras().get("usuario");
         LayoutInflater inflater = LayoutInflater.from(this);
         View cstmAction = inflater.inflate(R.layout.csmactionbar_layout, null);
 
@@ -92,7 +95,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(19.3910038, -99.2836967)));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(12));
 
-        ListenerMarkers listenerMarkers = new ListenerMarkers(ruta.getDestinos(),this);
+        ListenerMarkers listenerMarkers = new ListenerMarkers(ruta.getDestinos(),this,usuario);
         mMap.setOnMarkerClickListener(listenerMarkers);
         IniDataMap.initDataMap(ruta, mMap);
         ChangeDataMap.setmMap(mMap);

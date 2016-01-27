@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import desarrollo.sip.senda.OnBackTasks.OnBackColocarImagen;
 import desarrollo.sip.senda.R;
 import desarrollo.sip.senda.objetos.MiRuta;
 import desarrollo.sip.senda.objetos.Stuff;
@@ -65,7 +66,10 @@ public class AdaptadorMisRutas extends ArrayAdapter<MiRuta> {
         ImageView imagen = (ImageView) rowView.findViewById(R.id.imagenRegionMapa_AdaptadorMisRutas);
 
         String id = rutas.get(position).getPuntoCentro().latitude+","+rutas.get(position).getPuntoCentro().longitude;
-        new OnBackImagen(rutas.get(position).getRutaImagen(), imagen,id,rutas.get(position)).execute();
+        //new OnBackImagen(rutas.get(position).getRutaImagen(), imagen,id,rutas.get(position)).execute();
+
+        new OnBackColocarImagen(rutas.get(position),imagen).execute();
+
         identificador.setText(rutas.get(position).getIdentificador());
         linearLayout.removeAllViews();
         siglas.setText("Siglas: " + rutas.get(position).getSiglas());

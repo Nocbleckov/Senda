@@ -19,23 +19,23 @@ import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import desarrollo.sip.senda.abstractClass.WithImage;
 import desarrollo.sip.senda.activities.MisRutas;
 
 /**
  * Created by DESARROLLO on 16/01/16.
  */
-public class MiRuta implements Parcelable,Serializable {
-    private String identificador,siglas,municipio,estado,idRuta,cadenaRuta,rutaImagen;
+public class MiRuta extends WithImage implements Parcelable,Serializable {
+    private String identificador,siglas,municipio,estado,cadenaRuta;
     private List<LatLng> puntos;
     private LatLng puntoCentro;
-    private byte[] imagenCode;
     private ArrayList<Punto>destinos;
     private Bitmap foto;
 
 
     public MiRuta(String siglas,String municipio,String estado,String idRuta,String cadenaRuta,String rutaImagen,ArrayList<Punto> destinos,LatLng puntoCentro){
         this.cadenaRuta = cadenaRuta;
-        this.idRuta = idRuta;
+        this.id = idRuta;
         this.siglas = siglas;
         this.municipio = municipio;
         this.estado = estado;
@@ -43,6 +43,8 @@ public class MiRuta implements Parcelable,Serializable {
         this.rutaImagen = rutaImagen;
         this.destinos = destinos;
         this.puntoCentro = puntoCentro;
+        this.latitud  =  ""+puntoCentro.latitude;
+        this.longitud = ""+puntoCentro.longitude;
     }
 
     public MiRuta(Parcel in){
@@ -50,12 +52,14 @@ public class MiRuta implements Parcelable,Serializable {
         siglas = in.readString();
         municipio = in.readString();
         estado = in.readString();
-        idRuta = in.readString();
+        id = in.readString();
         cadenaRuta = in.readString();
         puntos = (List<LatLng>)in.readValue(MiRuta.class.getClassLoader());
-        imagenCode = (byte[])in.readValue(MiRuta.class.getClassLoader());
         puntoCentro = (LatLng)in.readValue(MiRuta.class.getClassLoader());
         destinos = (ArrayList<Punto>)in.readValue(MiRuta.class.getClassLoader());
+        latitud = in.readString();
+        longitud = in.readString();
+        imagenCode = (byte[])in.readValue(MiRuta.class.getClassLoader());
     }
 
     public static final Creator<MiRuta> CREATOR = new Creator<MiRuta>() {
@@ -88,10 +92,6 @@ public class MiRuta implements Parcelable,Serializable {
 
     public void setRutaImagen(String rutaImagen) {
         this.rutaImagen = rutaImagen;
-    }
-
-    public String getRutaImagen() {
-        return rutaImagen;
     }
 
     public void setDestinos(ArrayList<Punto> destinos) {
@@ -143,54 +143,15 @@ public class MiRuta implements Parcelable,Serializable {
         dest.writeString(siglas);
         dest.writeString(municipio);
         dest.writeString(estado);
-        dest.writeString(idRuta);
+        dest.writeString(id);
         dest.writeString(cadenaRuta);
         dest.writeValue(puntos);
-        dest.writeValue(imagenCode);
         dest.writeValue(puntoCentro);
         dest.writeValue(destinos);
+        dest.writeString(latitud);
+        dest.writeString(longitud);
+        dest.writeValue(imagenCode);
     }
 
-    protected byte[] obtenerImagen(){
-        String url = rutaImagen;
-        Bitmap bm = null;
-
-        try{
-
-            InputStream iS = new java.net.URL(url).openStream();
-            bm = BitmapFactory.decodeStream(iS);
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bm.compress(Bitmap.CompressFormat.PNG,100,stream);
-            imagenCode = stream.toByteArray();
-            stream.close();
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return imagenCode;
-    }
-
-
-    private class ColocarFoto extends AsyncTask<String,Void,Bitmap> implements Serializable{
-        ImageView imageView;
-
-        public ColocarFoto(ImageView imageView){
-            this.imageView = imageView;
-        }
-        @Override
-        protected Bitmap doInBackground(String... params) {
-            imagenCode = obtenerImagen();
-            int tamaño = imagenCode.length;
-            Bitmap foto = BitmapFactory.decodeByteArray(imagenCode,0,tamaño);
-            return foto;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            imageView.setImageBitmap(bitmap);
-            super.onPostExecute(bitmap);
-        }
-
-    }
 
 }

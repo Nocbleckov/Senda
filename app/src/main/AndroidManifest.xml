@@ -36,9 +36,15 @@
             android:name=".activities.MapaActivity"
             android:configChanges="screenSize|orientation" >
         </activity>
-        <activity android:name=".activities.EditarRutasActivity" >
+        <activity
+            android:name=".activities.EditarRutasActivity"
+            android:configChanges="screenSize|orientation"
+            >
         </activity>
-        <activity android:name=".activities.DetallesPuntoActivity" >
+        <activity
+            android:name=".activities.DetallesPuntoActivity"
+            android:configChanges="screenSize|orientation"
+            >
         </activity>
     </application>
 
