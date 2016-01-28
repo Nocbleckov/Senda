@@ -161,11 +161,16 @@ public class Stuff {
                     String rutaImagen = ruta.getString("rutaImagen");
                     JSONArray destinos = ruta.optJSONObject("destinos").optJSONArray("puntos");
                     ArrayList<Punto> puntos = obtenerPuntosA(destinos);
-                    JSONObject centro = ruta.optJSONObject("centro");
-                    double lat = (double)centro.opt("lat");
-                    double lng = (double)centro.opt("lng");
 
-                    MiRuta rutaTemp = new MiRuta(siglas,municipio,estado,idRuta,cadenaRuta,rutaImagen,puntos,new LatLng(lat,lng));
+                    LatLng centro = getLatLng(ruta.optJSONObject("centro"));
+                    LatLng sI = getLatLng(ruta.optJSONObject("sI"));
+                    LatLng sD = getLatLng(ruta.optJSONObject("sD"));
+                    LatLng iI = getLatLng(ruta.getJSONObject("iI"));
+                    LatLng iD = getLatLng(ruta.getJSONObject("iD"));
+
+                    Aristas aristas = new Aristas(sI,sD,iI,iD);
+
+                    MiRuta rutaTemp = new MiRuta(siglas,municipio,estado,idRuta,cadenaRuta,rutaImagen,puntos,centro,aristas);
                     misRutasTemp.add(rutaTemp);
                 }
 
@@ -175,6 +180,17 @@ public class Stuff {
 
         }
         return misRutasTemp;
+    }
+
+    public static LatLng getLatLng(JSONObject object){
+        LatLng temp = null;
+
+        double lat = (double)object.opt("lat");
+        double lng = (double)object.opt("lng");
+
+        temp = new LatLng(lat,lng);
+
+        return  temp;
     }
 
     public static Ruta obtenerRuta(String data){

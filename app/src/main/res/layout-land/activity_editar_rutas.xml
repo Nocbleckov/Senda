@@ -10,7 +10,7 @@
     <fragment xmlns:map="http://schemas.android.com/apk/res-auto"
         android:id="@+id/mapEditar"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="320dp"
+        android:layout_width="340dp"
         android:layout_height="match_parent"
         android:layout_weight="70"
         tools:context=".MapaActivity"
@@ -24,8 +24,6 @@
         android:layout_marginTop="5dp"
         android:background="@drawable/label_margin"
         android:layout_marginBottom="4dp"
-        android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp"
         >
     </ListView>
 

@@ -19,9 +19,16 @@
         <item
             android:id="@+id/guardarMapas"
             android:checked="false"
-            android:title="Guardar Mapa (offline)"
+            android:title="Guardar Mapa"
             android:visible="true"
             android:icon="@mipmap/dwmap"
+            />
+        <item
+            android:id="@+id/modoOff"
+            android:checked="false"
+            android:title="Mapa offline"
+            android:visible="true"
+            android:icon="@mipmap/misrutas"
             />
     </group>
 

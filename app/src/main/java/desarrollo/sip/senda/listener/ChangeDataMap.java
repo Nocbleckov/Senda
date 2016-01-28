@@ -10,6 +10,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
@@ -23,15 +24,15 @@ import desarrollo.sip.senda.objetos.Punto;
  */
 public final class ChangeDataMap {
 
-    private static  GoogleMap mMap;
-    private static  MiRuta ruta;
+    private static GoogleMap mMap;
+    private static MiRuta ruta;
 
-    private ChangeDataMap(){
+    private ChangeDataMap() {
 
     }
 
     public static void setmMap(GoogleMap mMap) {
-        ChangeDataMap.mMap =  mMap;
+        ChangeDataMap.mMap = mMap;
     }
 
     public static void setRuta(MiRuta ruta) {
@@ -42,29 +43,31 @@ public final class ChangeDataMap {
         return ruta;
     }
 
-    public static void iniChangeDataMap(){
+    public static void iniChangeDataMap() {
         mMap.clear();
-        colocarPuntos(ruta.getDestinos(),mMap);
-        moverCamara(ruta.getPuntoCentro(),mMap);
-        mMap.addPolyline(colocarRuta(ruta.getPuntos()));
+        colocarPuntos(ruta.getDestinos(), mMap);
+        moverCamara(ruta.getPuntoCentro(), mMap);
+        Polyline pol = mMap.addPolyline(colocarRuta(ruta.getPuntos()));
+        pol.setZIndex(1300);
     }
 
-    public static void moverCamara(LatLng latLng,GoogleMap mMap) {
+    public static void moverCamara(LatLng latLng, GoogleMap mMap) {
         CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(15).tilt(45).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
-    public static void centrarCamara(LatLng latLng, int zoom, int angulo,GoogleMap mMap) {
+    public static void centrarCamara(LatLng latLng, int zoom, int angulo, GoogleMap mMap) {
         CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(zoom).tilt(angulo).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
-    public static void colocarPuntos(ArrayList<Punto> destinos,GoogleMap mMap) {
+    public static void colocarPuntos(ArrayList<Punto> destinos, GoogleMap mMap) {
         for (int i = 0; i < destinos.size(); i++) {
             LatLng temp = destinos.get(i).getCoordenada();
             Marker marcaTemp = mMap.addMarker(new MarkerOptions().position(temp).title(destinos.get(i).getDireccion()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
         }
     }
+
     public static PolylineOptions colocarRuta(List<LatLng> puntos) {
         PolylineOptions polylineOptions = null;
         polylineOptions = new PolylineOptions();
@@ -75,6 +78,6 @@ public final class ChangeDataMap {
     }
 
     public static String aString() {
-        return "static map: "+mMap.toString()+" , "+"static ruta: "+ruta.toString();
+        return "static map: " + mMap.toString() + " , " + "static ruta: " + ruta.toString();
     }
 }

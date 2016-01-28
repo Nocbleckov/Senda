@@ -73,6 +73,7 @@ public class MisRutas extends AppCompatActivity {
 
     public void cargarRecyclerView(ArrayList<MiRuta> rutas){
         LinearLayoutManager layoutManager = new LinearLayoutManager(getBaseContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerMisRutas.setLayoutManager(layoutManager);
         AdaptadorRecyclerVMisRutas adaptadorRecyclerVMisRutas = new AdaptadorRecyclerVMisRutas(rutas,this);
         recyclerMisRutas.setAdapter(adaptadorRecyclerVMisRutas);
@@ -115,8 +116,7 @@ public class MisRutas extends AppCompatActivity {
             super.onPostExecute(rutas);
             if(rutas != null){
                 //cargarLista(rutas);
-                cargarRecyclerView(rutas
-                );
+                cargarRecyclerView(rutas);
             }
         }
     }

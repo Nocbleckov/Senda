@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
 
         miWifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-        //if(miWifi.getState() == NetworkInfo.State.CONNECTED){
+        if(miWifi.getState() == NetworkInfo.State.CONNECTED){
 
             String usuario = editUsuario.getText().toString().trim();
             String pass = editPass.getText().toString().trim();
@@ -89,9 +89,9 @@ public class LoginActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, "Los campos de usuario y contraseña no pueden estar vacíos", Toast.LENGTH_SHORT).show();
             }
-        /*}else{
+        }else{
             Toast.makeText(this, "No esta conectado a una Red", Toast.LENGTH_SHORT).show();
-        }*/
+        }
 
     }
 

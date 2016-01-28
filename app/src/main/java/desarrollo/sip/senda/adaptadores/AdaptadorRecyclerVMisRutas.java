@@ -69,6 +69,8 @@ public class AdaptadorRecyclerVMisRutas extends RecyclerView.Adapter<AdaptadorRe
         super.onAttachedToRecyclerView(recyclerView);
     }
 
+
+
     public static class RutaViewHolder extends RecyclerView.ViewHolder {
 
         CardView cvMiRuta;
@@ -86,6 +88,8 @@ public class AdaptadorRecyclerVMisRutas extends RecyclerView.Adapter<AdaptadorRe
             imagenRuta = (ImageView)cvMiRuta.findViewById(R.id.imagenMisRutas_CVMiRuta);
             botonVisitar = (Button)cvMiRuta.findViewById(R.id.botonVisitar_CVMiRuta);
         }
+
     }
+
 
 }

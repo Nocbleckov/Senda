@@ -119,16 +119,8 @@ public class Punto extends WithImage implements Parcelable {
         return municipio;
     }
 
-    public String getLongitud() {
-        return longitud;
-    }
-
     public String getLocalidad() {
         return localidad;
-    }
-
-    public String getLatitud() {
-        return latitud;
     }
 
     public String getIdPunto() {

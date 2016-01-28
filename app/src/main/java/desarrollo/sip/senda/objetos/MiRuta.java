@@ -29,11 +29,12 @@ public class MiRuta extends WithImage implements Parcelable,Serializable {
     private String identificador,siglas,municipio,estado,cadenaRuta;
     private List<LatLng> puntos;
     private LatLng puntoCentro;
+    private Aristas aristas;
     private ArrayList<Punto>destinos;
     private Bitmap foto;
 
 
-    public MiRuta(String siglas,String municipio,String estado,String idRuta,String cadenaRuta,String rutaImagen,ArrayList<Punto> destinos,LatLng puntoCentro){
+    public MiRuta(String siglas,String municipio,String estado,String idRuta,String cadenaRuta,String rutaImagen,ArrayList<Punto> destinos,LatLng puntoCentro,Aristas aristas){
         this.cadenaRuta = cadenaRuta;
         this.id = idRuta;
         this.siglas = siglas;
@@ -45,9 +46,11 @@ public class MiRuta extends WithImage implements Parcelable,Serializable {
         this.puntoCentro = puntoCentro;
         this.latitud  =  ""+puntoCentro.latitude;
         this.longitud = ""+puntoCentro.longitude;
+        this.aristas = aristas;
     }
 
     public MiRuta(Parcel in){
+
         identificador = in.readString();
         siglas = in.readString();
         municipio = in.readString();
@@ -59,7 +62,9 @@ public class MiRuta extends WithImage implements Parcelable,Serializable {
         destinos = (ArrayList<Punto>)in.readValue(MiRuta.class.getClassLoader());
         latitud = in.readString();
         longitud = in.readString();
+        aristas =(Aristas) in.readValue(MiRuta.class.getClassLoader());
         imagenCode = (byte[])in.readValue(MiRuta.class.getClassLoader());
+
     }
 
     public static final Creator<MiRuta> CREATOR = new Creator<MiRuta>() {
@@ -119,6 +124,9 @@ public class MiRuta extends WithImage implements Parcelable,Serializable {
         return puntos;
     }
 
+    public Aristas getAristas() {
+        return aristas;
+    }
     /*public void  getfoto(ImageView imageView){
         //new ColocarFoto(imageView).execute();
     }*/
@@ -150,6 +158,7 @@ public class MiRuta extends WithImage implements Parcelable,Serializable {
         dest.writeValue(destinos);
         dest.writeString(latitud);
         dest.writeString(longitud);
+        dest.writeValue(aristas);
         dest.writeValue(imagenCode);
     }
 

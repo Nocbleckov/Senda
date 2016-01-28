@@ -9,6 +9,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.io.Serializable;
@@ -24,9 +25,10 @@ import desarrollo.sip.senda.objetos.Punto;
 public  class IniDataMap {
 
     public static void initDataMap(MiRuta ruta,GoogleMap mMap){
-        colocarPuntos(ruta.getDestinos(),mMap);
+        colocarPuntos(ruta.getDestinos(), mMap);
         moverCamara(ruta.getPuntoCentro(),mMap);
-        mMap.addPolyline(colocarRuta(ruta.getPuntos()));
+        Polyline pol =mMap.addPolyline(colocarRuta(ruta.getPuntos()));
+        pol.setZIndex(1300);
     }
 
     public static void moverCamara(LatLng latLng,GoogleMap mMap) {

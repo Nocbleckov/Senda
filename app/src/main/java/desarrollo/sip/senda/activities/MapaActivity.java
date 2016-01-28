@@ -1,5 +1,6 @@
 package desarrollo.sip.senda.activities;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -26,12 +27,15 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.TileOverlayOptions;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import desarrollo.sip.senda.R;
+import desarrollo.sip.senda.TileClasses.CustomMapTileProvider;
+import desarrollo.sip.senda.TileClasses.TileDwlManager;
 import desarrollo.sip.senda.listener.ChangeDataMap;
 import desarrollo.sip.senda.listener.IniDataMap;
 import desarrollo.sip.senda.listener.ListenerMarkers;
@@ -50,6 +54,8 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
     private boolean estado = false;
     private Usuario usuario;
 
+    private Dialog dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +66,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
         LayoutInflater inflater = LayoutInflater.from(this);
         View cstmAction = inflater.inflate(R.layout.csmactionbar_layout, null);
 
+        dialog = Stuff.dialogProgressBar(this);
 
         android.support.v7.app.ActionBar bar = getSupportActionBar();
         ImageButton hamButton =(ImageButton)cstmAction.findViewById(R.id.iconoMenu);
@@ -87,6 +94,14 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+    }
+
+    public void cambiarModo(){
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        TileOverlayOptions tileOverlayOptions = new TileOverlayOptions();
+        CustomMapTileProvider customMapTileProvider = new CustomMapTileProvider();
+        tileOverlayOptions.tileProvider(customMapTileProvider);
+        mMap.addTileOverlay(tileOverlayOptions);
     }
 
     @Override
@@ -136,7 +151,10 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
                         startActivity(i);
                         break;
                     case R.id.guardarMapas:
-
+                        TileDwlManager tileDwlManager = new TileDwlManager(ruta,(int)mMap.getCameraPosition().zoom,12,getBaseContext(),dialog,MapaActivity.this);
+                        break;
+                    case R.id.modoOff:
+                        cambiarModo();
                         break;
                 }
 
