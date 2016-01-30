@@ -44,7 +44,7 @@
                 />
             <TextView
                 android:text="IdentificadorRuta"
-                android:textSize="22sp"
+                android:textSize="20sp"
                 android:id="@+id/labelIdentificador_CVMiRuta"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

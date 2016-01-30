@@ -44,6 +44,10 @@ public class CustomTileDw {
         this.url = String.format(url,x,y,zoom);
         this.progressBar = progressBar;
         this.progressLabel = progressLabel;
+
+    }
+
+    public void iniciarDescarga(){
         if(x<=coordMax(zoom) && y<=coordMax(zoom) && x>=0 && y>=0){
             tamañoImagen = tamaño();
             new OnBackDescarga(url).execute();
@@ -109,7 +113,7 @@ public class CustomTileDw {
             }
             Log.wtf("TAMAÑO_?",""+tamañoImagen);
             //regionDwl.aumentarAcumualdor(tamañoImagen);
-            tileDwlManager.aumentarAcumulador(tamañoImagen);
+            //tileDwlManager.aumentarAcumulador(tamañoImagen);
             return tamañoImagen;
         } catch (Exception e) {
             e.printStackTrace();
@@ -150,9 +154,9 @@ public class CustomTileDw {
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
             //double meta = regionDwl.getAcumulador()/1024;
-            double meta = tileDwlManager.getAcumulador()/1024;
+            double meta = tileDwlManager.getAcumulador();
             //double max = regionDwl.getActual((tamañoImagen / 1024));
-            double max = tileDwlManager.getActual((tamañoImagen/1024));
+            double max = tileDwlManager.getActual((tamañoImagen/(1024*1024)));
 
             int prc = (int)((max*100)/meta);
 
@@ -161,9 +165,9 @@ public class CustomTileDw {
             String metaS = new DecimalFormat("#.####").format(meta);
             String maxS = new DecimalFormat("#.####").format(max);
 
-            progressLabel.setText(maxS+ " KB " + "/" +metaS+" KB");
+            progressLabel.setText(maxS+ " MB " + "/" +metaS+" MB");
 
-            if(progressBar.getProgress() == 100){
+            if(progressBar.getProgress() == 100 || tileDwlManager.getActual(0) == tileDwlManager.getAcumulador()){
                 //regionDwl.setActual(0);
                 //regionDwl.setAcumulador(0);
                 tileDwlManager.setActual(0);

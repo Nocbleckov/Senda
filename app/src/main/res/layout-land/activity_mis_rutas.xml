@@ -7,6 +7,17 @@
     tools:context="sedatu.com.senda.activities.MisRutas"
     android:descendantFocusability="blocksDescendants">
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:id="@+id/imagenFalloConexion_MiRutas"
+        android:src="@drawable/errorconexion"
+
+        android:visibility="invisible"
+        />
+
     <TextView
         android:text="Usuario: "
         android:layout_width="match_parent"

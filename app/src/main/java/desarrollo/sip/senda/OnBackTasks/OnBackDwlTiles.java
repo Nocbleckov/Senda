@@ -1,53 +1,72 @@
 package desarrollo.sip.senda.OnBackTasks;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.os.HandlerThread;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 import desarrollo.sip.senda.R;
 import desarrollo.sip.senda.TileClasses.TileDwlManager;
-import desarrollo.sip.senda.objetos.Stuff;
+import desarrollo.sip.senda.activities.MapaActivity;
 
 /**
  * Created by DESARROLLO on 28/01/16.
  */
 public class OnBackDwlTiles extends AsyncTask<String,String,String>{
 
+    private List<TileDwlManager.Coordenada> coordenadas;
+
     private TileDwlManager tileDwlManager;
     private Dialog dialog;
 
     private ProgressBar progressBar;
     private TextView progressLabel;
+    private ProgressDialog pd;
 
-    public OnBackDwlTiles(TileDwlManager tileDwlManager){
+    private MapaActivity activity;
+
+    public OnBackDwlTiles(TileDwlManager tileDwlManager,MapaActivity activity,List<TileDwlManager.Coordenada> coordenadas){
         this.tileDwlManager = tileDwlManager;
         dialog = this.tileDwlManager.getDialog();
+        this.activity = activity;
+        this.coordenadas = coordenadas;
+    }
+
+    public void peso(List<TileDwlManager.Coordenada> coordenadas){
+        Thread hilo= new Thread(new OnBackPesoMax(coordenadas,tileDwlManager,progressLabel,pd));
+        HandlerThread thread = new HandlerThread("hilo");
+        hilo.start();
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+        dialog.show();
         progressBar = (ProgressBar)dialog.findViewById(R.id.progresbarr_CustomDialogPB);
         progressLabel = (TextView)dialog.findViewById(R.id.labelProgreso_CustomDialogPB);
         progressBar.setProgress(0);
         progressBar.setMax(100);
         progressLabel.setText("0 KB / Calculando... ");
-        this.dialog.show();
+        pd = ProgressDialog.show(activity, "Calculando informacion ..", "Esto puede tardar un par de minutos...", true);
     }
 
     @Override
     protected String doInBackground(String... params) {
-        tileDwlManager.descargaTiles(tileDwlManager.getZoomInicial(),progressBar,progressLabel);
+        tileDwlManager.iniciarTiles(tileDwlManager.getZoomInicial(), progressBar, progressLabel);
+        peso(coordenadas);
         return null;
     }
 
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
-        String maxS = new DecimalFormat("#.####").format((tileDwlManager.getAcumulador()/ 1024));
-        progressLabel.setText("0 KB /" + maxS + " KB");
     }
 }

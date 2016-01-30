@@ -94,6 +94,8 @@ public class OnBackColocarImagen extends AsyncTask<String, Bitmap, Bitmap> {
     protected Bitmap doInBackground(String... params) {
         Bitmap bm = null;
 
+        try {
+
             if (withImage.existeImagen()) {
                 bm = cargarFoto(withImage.getRutaInternaImagen());
             } else {
@@ -102,6 +104,9 @@ public class OnBackColocarImagen extends AsyncTask<String, Bitmap, Bitmap> {
             }
             withImage.setImagenCode(bitmapToByteArray(bm));
 
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return bm;
     }
 
@@ -111,6 +116,9 @@ public class OnBackColocarImagen extends AsyncTask<String, Bitmap, Bitmap> {
         if(bitmap != null){
             imageView.setImageBitmap(bitmap);
             imageView.setBackgroundResource(R.drawable.degradado);
+        }else{
+            Bitmap bm = BitmapFactory.decodeResource(imageView.getResources(),R.drawable.errorconexion);
+            imageView.setImageBitmap(bm);
         }
     }
 }

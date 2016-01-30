@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/miInfo"
+            android:checked="false"
+            android:title="Mi Informacion"
+            android:visible="true"
+            android:icon="@mipmap/minfo"
+            />
+
+        <item
+
+            android:id="@+id/generarSENDA"
+            android:checked="false"
+            android:title="Archivo sin Conexion"
+            android:visible="true"
+            android:icon="@mipmap/mispuntos"
+
+            />
+
+        <item
+            android:id="@+id/modoOff"
+            android:checked="false"
+            android:title="Modo sin Conexion"
+            android:visible="true"
+            android:icon="@mipmap/menuicono"
+            />
+    </group>
+
+</menu>

@@ -12,7 +12,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.PolyUtil;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,11 +30,17 @@ import desarrollo.sip.senda.activities.MisRutas;
  */
 public class MiRuta extends WithImage implements Parcelable,Serializable {
     private String identificador,siglas,municipio,estado,cadenaRuta;
-    private List<LatLng> puntos;
-    private LatLng puntoCentro;
+    //private List<LatLng> puntos;
+
+    //private transient LatLng puntoCentro;
+
+    private double centroLat;
+    private double centroLng;
+
+
     private Aristas aristas;
     private ArrayList<Punto>destinos;
-    private Bitmap foto;
+    //private Bitmap foto;
 
 
     public MiRuta(String siglas,String municipio,String estado,String idRuta,String cadenaRuta,String rutaImagen,ArrayList<Punto> destinos,LatLng puntoCentro,Aristas aristas){
@@ -43,7 +52,13 @@ public class MiRuta extends WithImage implements Parcelable,Serializable {
         this.identificador = idRuta+"_"+siglas+"_"+estado;
         this.rutaImagen = rutaImagen;
         this.destinos = destinos;
-        this.puntoCentro = puntoCentro;
+
+        //this.puntoCentro = puntoCentro;
+
+        this.centroLat = puntoCentro.latitude;
+        this.centroLng = puntoCentro.longitude;
+
+
         this.latitud  =  ""+puntoCentro.latitude;
         this.longitud = ""+puntoCentro.longitude;
         this.aristas = aristas;
@@ -57,8 +72,14 @@ public class MiRuta extends WithImage implements Parcelable,Serializable {
         estado = in.readString();
         id = in.readString();
         cadenaRuta = in.readString();
-        puntos = (List<LatLng>)in.readValue(MiRuta.class.getClassLoader());
-        puntoCentro = (LatLng)in.readValue(MiRuta.class.getClassLoader());
+        //puntos = (List<LatLng>)in.readValue(MiRuta.class.getClassLoader());
+
+
+        //puntoCentro = (LatLng)in.readValue(MiRuta.class.getClassLoader());
+        centroLat = (double)in.readDouble();
+        centroLng = (double)in.readDouble();
+
+
         destinos = (ArrayList<Punto>)in.readValue(MiRuta.class.getClassLoader());
         latitud = in.readString();
         longitud = in.readString();
@@ -79,9 +100,22 @@ public class MiRuta extends WithImage implements Parcelable,Serializable {
         }
     };
 
-    public void setFoto(Bitmap foto) {
+    /*private void writeObject(java.io.ObjectOutputStream stream) throws IOException {
+
+
+        stream.writeObject(identificador);
+        stream.writeObject(siglas);
+        stream.writeObject(municipio);
+        stream.writeObject(estado);
+        stream.writeObject(cadenaRuta);
+        stream.writeDouble(centroLat);
+        stream.writeObject(centroLng);
+
+    }*/
+
+    /*public void setFoto(Bitmap foto) {
         this.foto = foto;
-    }
+    }*/
 
     public void setCadenaRuta(String cadenaRuta) {
         this.cadenaRuta = cadenaRuta;
@@ -91,9 +125,9 @@ public class MiRuta extends WithImage implements Parcelable,Serializable {
         return cadenaRuta;
     }
 
-    public Bitmap getFoto() {
+    /*public Bitmap getFoto() {
         return foto;
-    }
+    }*/
 
     public void setRutaImagen(String rutaImagen) {
         this.rutaImagen = rutaImagen;
@@ -120,8 +154,8 @@ public class MiRuta extends WithImage implements Parcelable,Serializable {
     }
 
     public List<LatLng> getPuntos() {
-        this.puntos = PolyUtil.decode(cadenaRuta);
-        return puntos;
+        //this.puntos = PolyUtil.decode(cadenaRuta);
+        return  PolyUtil.decode(cadenaRuta);
     }
 
     public Aristas getAristas() {
@@ -132,7 +166,7 @@ public class MiRuta extends WithImage implements Parcelable,Serializable {
     }*/
 
     public LatLng getPuntoCentro() {
-        return puntoCentro ;
+        return new LatLng(centroLat,centroLng) ;
     }
 
     public ArrayList<Punto> getDestinos() {
@@ -153,8 +187,12 @@ public class MiRuta extends WithImage implements Parcelable,Serializable {
         dest.writeString(estado);
         dest.writeString(id);
         dest.writeString(cadenaRuta);
-        dest.writeValue(puntos);
-        dest.writeValue(puntoCentro);
+        //dest.writeValue(puntos);
+
+        //dest.writeValue(puntoCentro);
+        dest.writeDouble(centroLat);
+        dest.writeDouble(centroLng);
+
         dest.writeValue(destinos);
         dest.writeString(latitud);
         dest.writeString(longitud);

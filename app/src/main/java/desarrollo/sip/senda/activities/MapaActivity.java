@@ -1,9 +1,12 @@
 package desarrollo.sip.senda.activities;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Parcelable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -16,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,8 +31,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +47,7 @@ import desarrollo.sip.senda.TileClasses.TileDwlManager;
 import desarrollo.sip.senda.listener.ChangeDataMap;
 import desarrollo.sip.senda.listener.IniDataMap;
 import desarrollo.sip.senda.listener.ListenerMarkers;
+import desarrollo.sip.senda.objetos.Login;
 import desarrollo.sip.senda.objetos.MiRuta;
 import desarrollo.sip.senda.objetos.Punto;
 import desarrollo.sip.senda.objetos.Stuff;
@@ -54,12 +63,19 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
     private boolean estado = false;
     private Usuario usuario;
 
+    private ConnectivityManager cm;
+    private NetworkInfo miWifi;
+
+    private ProgressDialog pd;
     private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapa);
+
+        cm = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
+        miWifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
         ruta = (MiRuta) getIntent().getExtras().get("miRuta");
         usuario = (Usuario)getIntent().getExtras().get("usuario");
@@ -71,7 +87,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
         android.support.v7.app.ActionBar bar = getSupportActionBar();
         ImageButton hamButton =(ImageButton)cstmAction.findViewById(R.id.iconoMenu);
 
-        startDrawer(this, this);
+        startDrawer(R.id.navigationView_Frag,casos(getBaseContext()));
 
         hamButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,12 +112,22 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    public void cambiarModo(){
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+    public TileOverlay cambiarModo(int modo,TileOverlay tileOverlay){
+
+        if(modo == R.id.modoOff){
+        mMap.setMapType(GoogleMap.MAP_TYPE_NONE);
         TileOverlayOptions tileOverlayOptions = new TileOverlayOptions();
         CustomMapTileProvider customMapTileProvider = new CustomMapTileProvider();
         tileOverlayOptions.tileProvider(customMapTileProvider);
-        mMap.addTileOverlay(tileOverlayOptions);
+        tileOverlay = mMap.addTileOverlay(tileOverlayOptions);
+        }else{
+            if(tileOverlay != null){
+                tileOverlay.clearTileCache();
+                tileOverlay.remove();
+                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            }
+        }
+        return tileOverlay ;
     }
 
     @Override
@@ -128,12 +154,12 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    public void startDrawer(final Context context, final MapaActivity mapaActivity) {
-        navigationView = (NavigationView) findViewById(R.id.navigationView_Frag);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+    public NavigationView.OnNavigationItemSelectedListener casos(final Context context){
+
+        NavigationView.OnNavigationItemSelectedListener temp = new NavigationView.OnNavigationItemSelectedListener() {
+            TileOverlay tileOverlay = null;
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
-
                 if (item.isChecked()) {
                     item.setChecked(false);
                 } else {
@@ -151,16 +177,31 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
                         startActivity(i);
                         break;
                     case R.id.guardarMapas:
-                        TileDwlManager tileDwlManager = new TileDwlManager(ruta,(int)mMap.getCameraPosition().zoom,12,getBaseContext(),dialog,MapaActivity.this);
+                        if(miWifi.getState() == NetworkInfo.State.CONNECTED){
+                            TileDwlManager tileDwlManager = new TileDwlManager(ruta, (int) mMap.getCameraPosition().zoom, 12, context, dialog, MapaActivity.this);
+                        }else {
+                            Toast.makeText(context,"No cuenta con una conexion a Internet",Toast.LENGTH_LONG).show();
+                        }
                         break;
                     case R.id.modoOff:
-                        cambiarModo();
+                        tileOverlay = cambiarModo(R.id.modoOff,tileOverlay);
+                        break;
+                    case R.id.modoOn:
+                        cambiarModo(R.id.modoOn,tileOverlay);
                         break;
                 }
 
                 return false;
             }
-        });
+        };
+
+        return temp;
+    }
+
+
+    public void startDrawer(int view,NavigationView.OnNavigationItemSelectedListener navigationListener) {
+        navigationView = (NavigationView) findViewById(view);
+        navigationView.setNavigationItemSelectedListener(navigationListener);
         navigationView.getHeaderCount();
         View header = navigationView.getHeaderView(0);
 

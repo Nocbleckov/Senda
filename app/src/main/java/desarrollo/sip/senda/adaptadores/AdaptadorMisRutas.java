@@ -84,7 +84,7 @@ public class AdaptadorMisRutas extends ArrayAdapter<MiRuta> {
         return rowView;
     }
 
-    private class OnBackImagen extends AsyncTask<String, Void, Bitmap> {
+    /*private class OnBackImagen extends AsyncTask<String, Void, Bitmap> {
 
         String url;
         ImageView imageView;
@@ -159,6 +159,6 @@ public class AdaptadorMisRutas extends ArrayAdapter<MiRuta> {
                 imageView.setImageBitmap(bitmap);
             }
         }
-    }
+    }*/
 
 }

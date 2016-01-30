@@ -1,6 +1,7 @@
 package desarrollo.sip.senda.OnBackTasks;
 
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -70,9 +71,13 @@ public class OnBackNuevaRuta extends AsyncTask<Boolean,Ruta,Ruta> {
     @Override
     protected void onPostExecute(Ruta ruta) {
         super.onPostExecute(ruta);
+        if(ruta != null){
         this.ruta.setCadenaRuta(ruta.getPolyLine());
         ChangeDataMap.setRuta(this.ruta);
         ChangeDataMap.iniChangeDataMap();
-        editarRutasActivity.finish();
+
+        }else{
+            editarRutasActivity.finish();
+        }
     }
 }

@@ -30,6 +30,13 @@
             android:visible="true"
             android:icon="@mipmap/misrutas"
             />
+        <item
+            android:id="@+id/modoOn"
+            android:checked="false"
+            android:title="Mapa Online"
+            android:visible="true"
+            android:icon="@mipmap/misrutas"
+            />
     </group>
 
 </menu>

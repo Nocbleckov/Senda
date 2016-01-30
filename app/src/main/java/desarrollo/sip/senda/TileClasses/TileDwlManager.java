@@ -5,20 +5,15 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Point;
 import android.util.Log;
-import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Tile;
-
-import java.text.DecimalFormat;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
+import java.util.ArrayList;
+import java.util.List;
 
 import desarrollo.sip.senda.OnBackTasks.OnBackDwlTiles;
-import desarrollo.sip.senda.R;
+import desarrollo.sip.senda.OnBackTasks.OnBackPesoMax;
+import desarrollo.sip.senda.activities.MapaActivity;
 import desarrollo.sip.senda.objetos.Aristas;
 import desarrollo.sip.senda.objetos.MiRuta;
 import desarrollo.sip.senda.objetos.Stuff;
@@ -35,27 +30,32 @@ public class TileDwlManager  {
     private double actual;
     private double acumulador;
 
+    private List<Coordenada> coordenadas;
 
     private MiRuta ruta;
     private Dialog dialog;
     private Context context;
 
-    private Activity activity;
+    private MapaActivity mapaActivity;
 
 
-    public TileDwlManager(MiRuta ruta,int zoomInicial,int zoomFinal,Context context,Dialog dialog,Activity activity){
+    private ArrayList<CustomTileDw> customTiles;
+
+    public TileDwlManager(MiRuta ruta,int zoomInicial,int zoomFinal,Context context,Dialog dialog,MapaActivity mapaActivity){
+        customTiles = new ArrayList<>();
+        coordenadas = new ArrayList<>();
         this.ruta = ruta;
         this.zoomInicial = zoomInicial;
-        this.zoomFinal = zoomFinal;
+        this.zoomFinal = zoomInicial + 2 ;
         this.context = context;
         this.dialog = dialog;
-        this.activity = activity;
+        this.mapaActivity = mapaActivity;
         //iniciar(this.zoomInicial, progressBar, progressLabel);
-        new OnBackDwlTiles(this).execute();
+        new OnBackDwlTiles(this,mapaActivity,coordenadas).execute();
     }
 
 
-    public void descargaTiles(int zoom,ProgressBar progressBar,TextView textView){
+    public void iniciarTiles(int zoom, ProgressBar progressBar, TextView textView){
 
         Point[] puntos = convertAritasTile(ruta.getAristas(),zoom,256);
 
@@ -63,12 +63,14 @@ public class TileDwlManager  {
             for(int y = puntos[0].y;y<=puntos[2].y;y++){
                 Log.wtf("TILECOORD","x: "+i+","+"y: "+y);
                 CustomTileDw temp = new CustomTileDw(i,y,zoom,context,this,progressBar,textView,dialog);
+                Coordenada coordTemp  = new Coordenada(i,y,zoom);
+                coordenadas.add(coordTemp);
+                customTiles.add(temp);
             }
         }
-
-        if(zoomIncremento<zoomInicial+3){
-            zoomIncremento = zoomIncremento + 1;
-            descargaTiles(zoomIncremento,progressBar,textView);
+        if(zoomInicial<zoomFinal){
+            zoomInicial = zoomInicial + 1;
+            iniciarTiles(zoomInicial, progressBar, textView);
         }
     }
 
@@ -110,7 +112,34 @@ public class TileDwlManager  {
         return zoomInicial;
     }
 
+    public int getZoomFinal() {
+        return zoomFinal;
+    }
+
     public Dialog getDialog() {
         return dialog;
+    }
+
+    public void descargaTiles(){
+        for (CustomTileDw tiles:customTiles){
+            tiles.iniciarDescarga();
+        }
+    }
+
+    public Activity getActivity(){
+        return mapaActivity;
+    }
+
+
+    public class Coordenada {
+        private int x;
+        private int y;
+        private int zoom;
+
+        public Coordenada(int x,int y,int zoom){
+            this.x = x;
+            this.y = y;
+            this.zoom = zoom;
+        }
     }
 }

@@ -8,6 +8,8 @@ import android.os.Parcelable;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import desarrollo.sip.senda.abstractClass.WithImage;
@@ -16,10 +18,10 @@ import desarrollo.sip.senda.abstractClass.WithImage;
 /**
  * Created by DESARROLLO on 03/12/15.
  */
-public class Punto extends WithImage implements Parcelable {
+public class Punto extends WithImage implements Parcelable,Serializable {
 
     private String referencias, pais, numero, municipio, localidad, idAccion, estatus, estado, direccion, colonia, codigoPostal, calle,cadenaRuta;
-    private LatLng coordenada;
+    //private LatLng coordenada;
 
     public Punto() {
 
@@ -34,7 +36,7 @@ public class Punto extends WithImage implements Parcelable {
         this.localidad = localidad;
         this.latitud = latitud;
         this.id = idPunto;
-        this.idAccion = idAccion;
+        //this.idAccion = idAccion;
         this.estatus = estatus;
         this.estado = estado;
         this.direccion = direccion;
@@ -43,7 +45,7 @@ public class Punto extends WithImage implements Parcelable {
         this.calle = calle;
         this.cadenaRuta = cadenaRuta;
         this.rutaImagen = rutaImagen;
-        latLng(latitud, longitud);
+        //latLng(latitud, longitud);
     }
 
     protected Punto(Parcel in) {
@@ -65,7 +67,7 @@ public class Punto extends WithImage implements Parcelable {
         cadenaRuta = in.readString();
         rutaImagen = in.readString();
         //coordenada = in.readParcelable(LatLng.class.getClassLoader());
-        coordenada =(LatLng) in.readValue(LatLng.class.getClassLoader());
+        //coordenada =(LatLng) in.readValue(LatLng.class.getClassLoader());
         imagenCode = (byte[]) in.readValue(Punto.class.getClassLoader());
     }
 
@@ -86,18 +88,35 @@ public class Punto extends WithImage implements Parcelable {
 
     };
 
-    public void latLng(String lat, String lng) {
+    /*public void latLng(String lat, String lng) {
         try {
             this.coordenada = new LatLng(Float.parseFloat(lat), Float.parseFloat(lng));
         } catch (Exception e) {
             e.printStackTrace();
             this.coordenada = new LatLng(0, 0);
         }
-    }
+    }*/
 
-    public void setCoordenada(LatLng coordenada){
+    /*public void setCoordenada(LatLng coordenada){
         this.coordenada = coordenada;
-    }
+    }*/
+
+    /*private void writeObject(java.io.ObjectOutputStream stream)throws IOException{
+        stream.writeObject(referencias);
+        stream.writeObject(pais);
+        stream.writeObject(numero);
+        stream.writeObject(municipio);
+        stream.writeObject(localidad);
+        stream.writeObject(idAccion);
+        stream.writeObject(estatus);
+        stream.writeObject(estado);
+        stream.writeObject(direccion);
+        stream.writeObject(colonia);
+        stream.writeObject(codigoPostal);
+        stream.writeObject(calle);
+        stream.writeObject(cadenaRuta);
+    }*/
+
 
     public void setDireccion(String direccion){
         this.direccion = direccion;
@@ -156,7 +175,7 @@ public class Punto extends WithImage implements Parcelable {
     }
 
     public LatLng getCoordenada() {
-        return coordenada;
+        return new LatLng(Double.parseDouble(latitud),Double.parseDouble(longitud));
     }
 
     public String getCadenaRuta(){
@@ -176,7 +195,7 @@ public class Punto extends WithImage implements Parcelable {
     @Override
     public String toString() {
         return "Punto{" +
-                "coordenada=" + coordenada + "lat= " + latitud + "lng= " + longitud +
+                "coordenada=" + getCoordenada() + "lat= " + latitud + "lng= " + longitud +
                 '}';
     }
 
@@ -204,7 +223,7 @@ public class Punto extends WithImage implements Parcelable {
         dest.writeString(calle);
         dest.writeString(cadenaRuta);
         dest.writeString(rutaImagen);
-        dest.writeValue(coordenada);
+        //dest.writeValue(coordenada);
         dest.writeByteArray(imagenCode);
     }
 

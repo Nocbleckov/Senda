@@ -102,6 +102,7 @@ public class Conexion {
                 conexion.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 conexion.setRequestProperty("charset", "utf-8");
                 conexion.setRequestProperty("Content-Length", "" + Integer.toString(parametros.getBytes().length));
+                conexion.setConnectTimeout(600000);
                 conexion.setUseCaches(false);
 
                 DataOutputStream wr = new DataOutputStream(conexion.getOutputStream());
