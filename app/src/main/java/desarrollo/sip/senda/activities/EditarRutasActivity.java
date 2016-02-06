@@ -31,6 +31,7 @@ import desarrollo.sip.senda.listener.IniDataMap;
 import desarrollo.sip.senda.listener.ListerEditarRuta;
 import desarrollo.sip.senda.objetos.MiRuta;
 import desarrollo.sip.senda.objetos.Punto;
+import desarrollo.sip.senda.objetos.Usuario;
 
 public class EditarRutasActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -42,7 +43,23 @@ public class EditarRutasActivity extends AppCompatActivity implements OnMapReady
     private ArrayList<Punto> destinosOrg = new ArrayList<>();
     private AdaptadorRutaEditar adaptador;
     private MapaActivity mapaActivity;
+    private Usuario usuario;
 
+
+
+    /*
+    * Metodo sobreescrito heredado del padre AppComparActivity
+    * se referencian los valores ,obtenidos del getSupporFragmetManager que busca el id mapEditar, a mapFragment
+    *
+    * se referencian el usuario obtenido del intent a el usuario de la clase
+    *
+    * se referencia la ruta obtenida del intent a la ruta de la clase
+    *
+    * se llena el Arraylist destinosMostrar con rutas.destinos
+    *
+    * ruta.destinos es referenciada por destinosOrg
+    *
+    * */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,12 +69,23 @@ public class EditarRutasActivity extends AppCompatActivity implements OnMapReady
         mapFragment.getMapAsync(this);
 
         ruta = (MiRuta) getIntent().getExtras().get("miRuta");
+        usuario = (Usuario)getIntent().getExtras().get("usuario");
 
         destinosMostrar.addAll(ruta.getDestinos());
         destinosOrg = ruta.getDestinos();
         setTitle("Edición de Ruta");
     }
 
+
+    /*
+    * metodo sobreescrito de la interface OnMapReadyCallBack
+    * es llamado cuando el mapa esta listo
+    *
+    * invoca los metodos iniLista() e iniListener()
+    *
+    * invoca el metodo estatico iniDataMap de la clase IniDataMap
+    *
+    * */
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -67,6 +95,13 @@ public class EditarRutasActivity extends AppCompatActivity implements OnMapReady
         IniDataMap.initDataMap(ruta, mMap);
     }
 
+    /*
+    * refencia el ListView encontrado en el xml con el id listaRuta_EditarRuta, al listaRutaEditable de la clase
+    * se inicializa el AdaptadorRutaEditar
+    *
+    * se le asigna como adapter ,al Listview de la clase, el AdaptadorRutaEditar
+    *
+    * */
     public void iniLista() {
         listaRutaEditable = (ListView) findViewById(R.id.listaRuta_EditarRuta);
         adaptador = new AdaptadorRutaEditar(this, destinosMostrar,mMap);
@@ -76,6 +111,16 @@ public class EditarRutasActivity extends AppCompatActivity implements OnMapReady
         setOnClickButtons(mifooter);
     }
 
+
+    /*
+    *
+    * metodo  que agrega los OnClickListener a los botones aceptar y recargar
+    *
+    * botonAceptar al precionarse limpia los destinos y agrega los nuevos obtenidos al intaciar y executar la clase OnBackNuevaRuta
+    *
+    * botonRecargar al precionarse el arreglo destinoMostrar es llenado con ruta.destinos
+    *
+    * */
     public void setOnClickButtons(View view) {
         Button botonRecargar = (Button) view.findViewById(R.id.botonRecargar_FooteList);
         Button botonAceptar = (Button) view.findViewById(R.id.botonAceptar_FooterList);
@@ -86,7 +131,7 @@ public class EditarRutasActivity extends AppCompatActivity implements OnMapReady
                 if (destinosMostrar.size() == destinosOrg.size()) {
                     ruta.getDestinos().clear();
                     ruta.getDestinos().addAll(destinosMostrar);
-                    new OnBackNuevaRuta(ruta.getDestinos(), ruta,EditarRutasActivity.this).execute();
+                    new OnBackNuevaRuta(ruta.getDestinos(), ruta,EditarRutasActivity.this,usuario.getIdUsuario()).execute();
                 }
             }
         });

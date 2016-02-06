@@ -40,6 +40,7 @@ public class TileDwlManager  {
 
 
     private ArrayList<CustomTileDw> customTiles;
+    private int contador = 1;
 
     public TileDwlManager(MiRuta ruta,int zoomInicial,int zoomFinal,Context context,Dialog dialog,MapaActivity mapaActivity){
         customTiles = new ArrayList<>();
@@ -63,6 +64,8 @@ public class TileDwlManager  {
             for(int y = puntos[0].y;y<=puntos[2].y;y++){
                 Log.wtf("TILECOORD","x: "+i+","+"y: "+y);
                 CustomTileDw temp = new CustomTileDw(i,y,zoom,context,this,progressBar,textView,dialog);
+                temp.setPosition(contador);
+                contador = contador +1;
                 Coordenada coordTemp  = new Coordenada(i,y,zoom);
                 coordenadas.add(coordTemp);
                 customTiles.add(temp);
@@ -130,6 +133,13 @@ public class TileDwlManager  {
         return mapaActivity;
     }
 
+    public void clearCustomTiles(){
+        customTiles.clear();
+    }
+
+    public int getMax(){
+        return customTiles.size();
+    }
 
     public class Coordenada {
         private int x;

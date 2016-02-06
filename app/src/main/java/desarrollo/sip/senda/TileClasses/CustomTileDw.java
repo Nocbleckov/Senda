@@ -25,9 +25,12 @@ public class CustomTileDw {
     private String url ="http://mt0.google.com/vt/lyrs=y&hl=es&x=%d&y=%d&z=%d&scale=4&s=Galileo";
     private Context context;
     private int x , y, zoom;
-
     private Dialog dialog;
+
     //private RegionDwl regionDwl;
+
+    private int position;
+
     private TileDwlManager tileDwlManager;
     private ProgressBar progressBar;
     private TextView progressLabel;
@@ -37,7 +40,6 @@ public class CustomTileDw {
         this.x = x;
         this.y = y;
         this.dialog = dialog;
-        //this.regionDwl = regionDwl;
         this.tileDwlManager = tileDwlManager;
         this.zoom = zoom;
         this.context = context;
@@ -58,6 +60,15 @@ public class CustomTileDw {
         int max =(int) Math.sqrt(Math.pow(4,zoom)) -1 ;
         return max;
     }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
 
     private File crearRuta(int x,int zoom){
 
@@ -112,8 +123,6 @@ public class CustomTileDw {
                 tamañoImagen = 0;
             }
             Log.wtf("TAMAÑO_?",""+tamañoImagen);
-            //regionDwl.aumentarAcumualdor(tamañoImagen);
-            //tileDwlManager.aumentarAcumulador(tamañoImagen);
             return tamañoImagen;
         } catch (Exception e) {
             e.printStackTrace();
@@ -167,11 +176,10 @@ public class CustomTileDw {
 
             progressLabel.setText(maxS+ " MB " + "/" +metaS+" MB");
 
-            if(progressBar.getProgress() == 100 || tileDwlManager.getActual(0) == tileDwlManager.getAcumulador()){
-                //regionDwl.setActual(0);
-                //regionDwl.setAcumulador(0);
+            if(position == tileDwlManager.getMax()){
                 tileDwlManager.setActual(0);
                 tileDwlManager.setAcumulador(0);
+                tileDwlManager.clearCustomTiles();
                 dialog.dismiss();
             }
         }
@@ -179,8 +187,6 @@ public class CustomTileDw {
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
-
-            //regionDwl.aumentarAcumualdor();
         }
     }
 

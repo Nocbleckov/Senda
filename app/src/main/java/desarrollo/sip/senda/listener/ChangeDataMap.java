@@ -24,6 +24,14 @@ import desarrollo.sip.senda.objetos.Punto;
  */
 public final class ChangeDataMap {
 
+    /*
+    * Esta es una clase final que recibe un mapa y una ruta
+    *
+    * su funcion es cambiar el mapa con los datos que reciba en la ruta
+    *
+    *
+    * */
+
     private static GoogleMap mMap;
     private static MiRuta ruta;
 
@@ -31,18 +39,35 @@ public final class ChangeDataMap {
 
     }
 
+    /*
+    * se le asigna el Mapa
+    * */
     public static void setmMap(GoogleMap mMap) {
         ChangeDataMap.mMap = mMap;
     }
 
+    /*
+    * se le asigna la Ruta
+    * */
     public static void setRuta(MiRuta ruta) {
         ChangeDataMap.ruta = ruta;
     }
 
+
+    /*
+    * devuelve la ruta
+    * */
     public static MiRuta getRuta() {
         return ruta;
     }
 
+
+    /*
+    * invoca los metodos colocarPuntos y moverCamara
+    *
+    * agrega una polyline al mapa y la eleva 1300
+    *
+    * */
     public static void iniChangeDataMap() {
         mMap.clear();
         colocarPuntos(ruta.getDestinos(), mMap);
@@ -51,16 +76,28 @@ public final class ChangeDataMap {
         pol.setZIndex(1300);
     }
 
+    /*
+    * cambia la camara del mapa, al punto latlng que se le de
+    * */
     public static void moverCamara(LatLng latLng, GoogleMap mMap) {
         CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(15).tilt(45).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
+    /*
+    * centra la camara y cambia el angulo
+    * */
     public static void centrarCamara(LatLng latLng, int zoom, int angulo, GoogleMap mMap) {
         CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(zoom).tilt(angulo).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
+
+    /*
+    *
+    * coloca marcas en el mapa es necesario pasarle un arreglo de puntos
+    *
+    * */
     public static void colocarPuntos(ArrayList<Punto> destinos, GoogleMap mMap) {
         for (int i = 0; i < destinos.size(); i++) {
             LatLng temp = destinos.get(i).getCoordenada();
@@ -68,6 +105,11 @@ public final class ChangeDataMap {
         }
     }
 
+    /*
+    *
+    * crea un PolylineOption y lo devuelve es necesario para poder crear una Polyline
+    *
+    * */
     public static PolylineOptions colocarRuta(List<LatLng> puntos) {
         PolylineOptions polylineOptions = null;
         polylineOptions = new PolylineOptions();

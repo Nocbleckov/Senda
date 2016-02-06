@@ -24,6 +24,16 @@ public class DetallesPuntoActivity extends Activity {
     TextView direccionCompleta,numeroCalle,colonia,localidad,municipio,estado,codigoPostal,estatus;
     ImageView puntoImagen;
 
+    /*
+    * metodo sobreescrito del padre Activity
+    * obtiene el punto del intent y se lo asigna el punto de la clase
+    * obtiene el usuario del intent y se lo asigna el usuario de la clase
+    *
+    * convoca el metodo iniWidgets,colocarInfo y cercania
+    *
+    *
+    **/
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +45,13 @@ public class DetallesPuntoActivity extends Activity {
         cercania(punto,usuario.getIdUsuario());
     }
 
+
+    /*
+    * otiene los elementos relacionados con su id y se los asigna a los elementos correspondientes
+    *
+    * cardView,direccionCompleta,numbreCalle,colonia,localidad,municipio,estado,codigoPostal,estatus,puntoImagen
+    *
+    * */
     public void iniWidgets(){
         cardView = (CardView)findViewById(R.id.carViewPunto_DetallesPunto);
         direccionCompleta = (TextView)cardView.findViewById(R.id.textDireccionCompleta_DetallesPunto);
@@ -48,6 +65,13 @@ public class DetallesPuntoActivity extends Activity {
         puntoImagen = (ImageView)cardView.findViewById(R.id.imagenPunto_DetallesPunto);
     }
 
+
+    /*
+    *
+    * coloca la informacion de un objeto punto en los textview correspondientes
+    *
+    * */
+
     public void colocarInfo(Punto punto){
         direccionCompleta.setText(punto.getDireccion());
         numeroCalle.setText(punto.getCalle()+" No."+punto.getNumero());
@@ -60,6 +84,9 @@ public class DetallesPuntoActivity extends Activity {
         new OnBackColocarImagen(punto,puntoImagen).execute();
     }
 
+    /*
+    * inicia el location manager que se encarga de encontrar tu posicion
+    * */
     public void cercania(Punto punto,String idUsuario){
 
         LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);

@@ -24,9 +24,16 @@ import desarrollo.sip.senda.objetos.Punto;
  * Created by DESARROLLO on 23/01/16.
  */
 public class AdaptadorRutaEditar extends ArrayAdapter<Punto>{
+
     Context context;
     ArrayList<Punto> puntos;
     GoogleMap mMap;
+
+    /*
+    *
+    * Adaptador para el Listview RutaEditar para ser instanciado necesita un Context, un ArrayList Punto y un GoogleMap
+    *
+    * */
 
     public AdaptadorRutaEditar(Context context,ArrayList<Punto> puntos,GoogleMap mMap){
         super(context, -1, puntos);
@@ -34,6 +41,11 @@ public class AdaptadorRutaEditar extends ArrayAdapter<Punto>{
         this.puntos = puntos;
         this.mMap = mMap;
     }
+
+    /*
+    * Este metodo es llamado cada vez que se muestra la row de u listview
+    *
+    * */
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {

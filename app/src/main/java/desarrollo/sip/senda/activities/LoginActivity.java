@@ -57,6 +57,10 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+
+    /*
+    Inicia los Widgets Cuando se Llama
+    */
     public void iniciarWidgets(){
         editUsuario = (EditText)findViewById(R.id.editNombre_Login);
         editPass = (EditText)findViewById(R.id.editPass_Login);
@@ -65,6 +69,10 @@ public class LoginActivity extends AppCompatActivity {
         chekedLogueo = (CheckedTextView)findViewById(R.id.checkLogueo_Login);
     }
 
+
+    /*
+    * Metodo OnClick se llama cuando es presionado el CheckBox y crea un cuado de dialogo
+    * */
     public void onClickMarca(View view) {
         if(!chekedLogueo.isChecked()){
             chekedLogueo.setChecked(true);
@@ -75,6 +83,11 @@ public class LoginActivity extends AppCompatActivity {
             chekedLogueo.setChecked(false);
         }
     }
+
+
+    /*
+    * Metodo OnClick del boton Ingresar al ser presionado inicia la conexion a la base de datos para obtener el usuario
+    * */
 
     public void onClickIngresar(View view){
 
@@ -95,6 +108,10 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+
+    /*
+    * Metodo onClick coloca los edit text en blanco
+    * */
     public void onClickLimpiar(View view){
         editPass.setText("");
         editUsuario.setText("");
@@ -118,6 +135,8 @@ public class LoginActivity extends AppCompatActivity {
         };
     }
 
+
+
     public View.OnClickListener cancelar(){
         return new View.OnClickListener() {
             @Override
@@ -128,12 +147,19 @@ public class LoginActivity extends AppCompatActivity {
         };
     }
 
+    /*
+    * Al ser llamado inicia la siguiente actividad que es la lista de Rutas
+    * */
     public void iniciarSiguiente(Usuario usuario){
         Intent i = new Intent(LoginActivity.this,MisRutas.class);
         i.putExtra("usuario",(Parcelable)usuario);
         startActivity(i);
     }
 
+
+    /*
+    * Genera un archivo binario de la clase Login
+    * */
     public void generarLogueo(Login login,String nombre){
         try {
             File archivo = new File(Stuff.crearRuta("/senda/data") + "/personal.login");
@@ -150,6 +176,9 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /*
+    * Carga el archivo de la ruta raiz/senda/data/persona.login ,lo castea en un Objeto Login y lo devuelve
+    * */
     public Login cargarArchivo(){
         Login login = null;
         try{
@@ -165,17 +194,31 @@ public class LoginActivity extends AppCompatActivity {
         return  login;
     }
 
+
+    /*
+    * Clase interna al ser llamada inicia una peticion al servidor para buscar y traer los datos del usuario
+    * */
+
     private class onBackLogin extends AsyncTask<String,Boolean,Usuario>{
 
         private Context context;
+
+        /*
+        * Contructor de la clase interna necesita un Context
+        * */
 
         public onBackLogin(Context context){
             this.context = context;
         }
 
+
+        /*
+        * Metodo sobreescrito, pertenece al padre AsyncTask
+        * inicia una tarea en segundo plano
+        * aqui se inicia la conexion al servido
+        * */
         @Override
         protected Usuario doInBackground(String... params) {
-
             String nick = params[0];
             String pass = params[1];
             Usuario usuario = null ;
@@ -198,6 +241,18 @@ public class LoginActivity extends AppCompatActivity {
             }
             return usuario;
         }
+
+        /*
+        * Metodo sobreescrito, pertenece al padre AsyncTask
+        * se executa cuando acaba el metodo doInBackground
+        *
+        * En caso de que el usuario obtenido en la conexion no sea nulo
+        * instancia la clase login pasandole los parametros de usuario.nick, usuario.pass, NumSerie.id y el mismo objeto usuario
+        * invoca el metodo generarLogue y le pasa el objeto Login y el nick del usuario
+        *
+        * En caso de que el usuario sea nulo muestra un mensaje Toast
+        *
+        * */
 
         @Override
         protected void onPostExecute(Usuario usuario) {

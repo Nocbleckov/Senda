@@ -27,11 +27,22 @@ public class AdaptadorRecyclerVMisRutas extends RecyclerView.Adapter<AdaptadorRe
     ArrayList<MiRuta> misRutas ;
     MisRutas actividadMisRutas;
 
+
+    /*
+    * Adaptador del RecyclerView necesito un Arrylist MiRuta y una actividad MisRutas
+    * */
+
     public AdaptadorRecyclerVMisRutas(ArrayList<MiRuta> misRutas,MisRutas actividadMisRutas){
         this.misRutas = misRutas;
         this.actividadMisRutas = actividadMisRutas;
     }
 
+
+    /*
+    *
+    *Instancia la clase RutaViewHolder que hereda de RecylcerView.ViewHolder y la devuelve
+    *
+    * */
     @Override
     public RutaViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -41,6 +52,12 @@ public class AdaptadorRecyclerVMisRutas extends RecyclerView.Adapter<AdaptadorRe
         return rutaViewHolder;
     }
 
+
+
+    /*
+    *
+    * Se colocan los datos en los TextViews
+    * */
     @Override
     public void onBindViewHolder(RutaViewHolder holder,int position) {
 
@@ -70,6 +87,13 @@ public class AdaptadorRecyclerVMisRutas extends RecyclerView.Adapter<AdaptadorRe
     }
 
 
+    /*
+    *
+    * clase interna que hereda de RecyclerView.ViewHoldr
+    *
+    * es donde se inicializan los widgets
+    *
+    * */
 
     public static class RutaViewHolder extends RecyclerView.ViewHolder {
 

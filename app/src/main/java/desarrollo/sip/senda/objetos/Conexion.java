@@ -114,6 +114,8 @@ public class Conexion {
         }
 
         this.codigoRespuesta = conexion.getResponseCode();
+        String a = conexion.getContentEncoding();
+        String b = conexion.getRequestMethod();
         this.mensaje = conexion.getResponseMessage();
 
         InputStream in = conexion.getInputStream();

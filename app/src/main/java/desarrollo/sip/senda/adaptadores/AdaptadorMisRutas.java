@@ -41,12 +41,27 @@ public class AdaptadorMisRutas extends ArrayAdapter<MiRuta> {
     Context context;
     ArrayList<MiRuta> rutas;
 
+    /*
+    *
+    * Adaptador del Listview Mis Rutas
+    *
+    * para poder instanciarse necesita un Context y un Arraylist de MiRuta
+    *
+    * */
+
     public AdaptadorMisRutas(Context context, ArrayList<MiRuta> rutas) {
         super(context, -1, rutas);
         this.context = context;
         this.rutas = rutas;
     }
 
+
+    /*
+    * metodo sobreescrito heredado de la clase padre ArrayAdapter
+    *
+    * es llamado cada vez que la row del listview es mostrado
+    *
+    * */
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
@@ -83,6 +98,10 @@ public class AdaptadorMisRutas extends ArrayAdapter<MiRuta> {
 
         return rowView;
     }
+
+    /*
+    * era una clase interna que hereda de AsyncTask
+    * */
 
     /*private class OnBackImagen extends AsyncTask<String, Void, Bitmap> {
 

@@ -47,12 +47,11 @@ import desarrollo.sip.senda.objetos.Stuff;
 import desarrollo.sip.senda.objetos.Usuario;
 
 
-
 public class MisRutas extends AppCompatActivity {
 
     private Usuario usuario;
     private TextView textUsuario;
-    private ImageView foto,errorConexion;
+    private ImageView foto, errorConexion;
     private RecyclerView recyclerMisRutas;
     private ConnectivityManager cm;
     private NetworkInfo miWifi;
@@ -60,40 +59,61 @@ public class MisRutas extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private boolean estado = false;
 
+    /*
+    * Metodo sobreescrito del padre AppCompatActivity es llamado cuando se inicia la actividad por primera vez
+    *
+    * Se referencia los objetos antes instanciados ConnectivityManager y NetworkInfo
+    * Se referencia el objeto usuario obteniendo el valor del Intent
+    *
+    *
+    *
+    * */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mis_rutas);
 
-        cm = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
+        cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         miWifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
         this.usuario = (Usuario) getIntent().getExtras().get("usuario");
 
-        errorConexion = (ImageView)findViewById(R.id.imagenFalloConexion_MiRutas);
+        errorConexion = (ImageView) findViewById(R.id.imagenFalloConexion_MiRutas);
 
-        if(miWifi.getState() == NetworkInfo.State.CONNECTED){
+        if (miWifi.getState() == NetworkInfo.State.CONNECTED) {
             iniciarWidgets();
             new OnBackMisRutas().execute();
-        }else{
+        } else {
             errorConexion.setVisibility(View.VISIBLE);
             iniciarActionBar();
         }
     }
 
-    public void iniciarWidgets(){
+
+    /*
+    * invoca al metodo iniciarActionBar
+    * recyclerMisRutas es inicializado con el valor Obtenido del xml y el id R.id.recyclerVMiRuta_MisRutas
+    *
+    * */
+    public void iniciarWidgets() {
         iniciarActionBar();
-        recyclerMisRutas = (RecyclerView)findViewById(R.id.recyclerVMiRuta_MisRutas);
+        recyclerMisRutas = (RecyclerView) findViewById(R.id.recyclerVMiRuta_MisRutas);
     }
 
-    public void iniciarActionBar(){
+
+    /*
+    * Este metodo instancia y referencia un LayoutInflater que servira
+    * para inflar un View que sera asignado como customView al ActionBar
+    * */
+    public void iniciarActionBar() {
         LayoutInflater inflater = LayoutInflater.from(this);
         View cstmAction = inflater.inflate(R.layout.csmactionbar_layout, null);
         android.support.v7.app.ActionBar bar = getSupportActionBar();
-        ImageButton hamButton =(ImageButton)cstmAction.findViewById(R.id.iconoMenu);
-        TextView title = (TextView)cstmAction.findViewById(R.id.titleBar_CSMActionBar);
+        ImageButton hamButton = (ImageButton) cstmAction.findViewById(R.id.iconoMenu);
+        TextView title = (TextView) cstmAction.findViewById(R.id.titleBar_CSMActionBar);
 
-        title.setText("Mis Rutas: "+ usuario.getNombre());
+        title.setText("Mis Rutas: " + usuario.getNombre());
 
         startDrawer(R.id.navigationView_Frag, casos());
 
@@ -108,7 +128,7 @@ public class MisRutas extends AppCompatActivity {
             }
         });
 
-        if(bar != null){
+        if (bar != null) {
             bar.setTitle("");
             bar.setCustomView(cstmAction);
             bar.setDisplayShowCustomEnabled(true);
@@ -116,8 +136,15 @@ public class MisRutas extends AppCompatActivity {
 
     }
 
-    public NavigationView.OnNavigationItemSelectedListener casos(){
-        return new NavigationView.OnNavigationItemSelectedListener(){
+
+    /*
+    * Se instancia la clase NavigationView y se llama su interface interna OnNavigationItemSelectedListener y lo de vuelve
+    *
+    * Dentro de este metodo ,OnNavigationItemSelectedListener, es donde va la logia del navigationView dentro del DrawerLayout
+    * */
+
+    public NavigationView.OnNavigationItemSelectedListener casos() {
+        return new NavigationView.OnNavigationItemSelectedListener() {
 
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
@@ -131,8 +158,8 @@ public class MisRutas extends AppCompatActivity {
                 drawerLayout.closeDrawers();
                 switch (item.getItemId()) {
                     case R.id.generarSENDA:
-                        Senda ruta =cargarArchivo();
-                        if(ruta != null){
+                        Senda ruta = cargarArchivo();
+                        if (ruta != null) {
                             iniciarWidgets();
                             cargarRecyclerView(ruta.getMisRutas());
                         }
@@ -144,58 +171,83 @@ public class MisRutas extends AppCompatActivity {
         };
     }
 
-    public void cargarRecyclerView(ArrayList<MiRuta> rutas){
+
+    /*
+    *
+    * Este metodo instancia e inicializa la clase LinearLayoutManager
+    * se le asigna este linearlayoutManager a el recyclerView
+    *
+    * Se intancia e inicializa ka clase AdapatadorRecyclerVMisRutas y posteriosmente es
+    * asignada al recyclerMisRutas
+    *
+    * */
+    public void cargarRecyclerView(ArrayList<MiRuta> rutas) {
         errorConexion.setVisibility(View.INVISIBLE);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getBaseContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerMisRutas.setLayoutManager(layoutManager);
-        AdaptadorRecyclerVMisRutas adaptadorRecyclerVMisRutas = new AdaptadorRecyclerVMisRutas(rutas,this);
+        AdaptadorRecyclerVMisRutas adaptadorRecyclerVMisRutas = new AdaptadorRecyclerVMisRutas(rutas, this);
         recyclerMisRutas.setAdapter(adaptadorRecyclerVMisRutas);
     }
 
-    public void activiadMapa(MiRuta miRuta){
-        Intent i = new Intent(MisRutas.this,MapaActivity.class);
-        Log.wtf("Intent",i.toString());
+    /*
+    * Inicia la activiada MapaActivity
+    * */
+    public void activiadMapa(MiRuta miRuta) {
+        Intent i = new Intent(MisRutas.this, MapaActivity.class);
+        Log.wtf("Intent", i.toString());
         i.putExtra("miRuta", (Parcelable) miRuta);
         i.putExtra("usuario", (Parcelable) usuario);
         startActivity(i);
     }
 
 
-    public void generarSENDA(Senda rutas,String nombre){
+    /*
+    * Genera un archivo en la ruta root/senda/data con el nombre de MisRutas.senda
+    * */
+    public void generarSENDA(Senda rutas, String nombre) {
         try {
             File archivo = new File(Stuff.crearRuta("/senda/data") + "/MisRutas.senda");
             archivo.createNewFile();
-            FileOutputStream fOs = new FileOutputStream(archivo,false);
+            FileOutputStream fOs = new FileOutputStream(archivo, false);
             ObjectOutputStream oOs = new ObjectOutputStream(fOs);
             oOs.writeObject(rutas);
             oOs.close();
             fOs.close();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             Toast.makeText(this, "Se a generado su SENDA", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public Senda cargarArchivo(){
+
+    /*
+    * Obtiene el archivo binario en la ruta root/senda/data con el nombre de Misrutas.senda
+    * lo castea a un objeto Senda y lo devuelve
+    * */
+    public Senda cargarArchivo() {
         Senda rutas = null;
-        try{
-            File archivo = new File(Environment.getExternalStorageDirectory()+"/senda/data"+"/Misrutas.senda");
+        try {
+            File archivo = new File(Environment.getExternalStorageDirectory() + "/senda/data" + "/Misrutas.senda");
             FileInputStream iS = new FileInputStream(archivo);
             ObjectInputStream oiS = new ObjectInputStream(iS);
-            rutas = (Senda)oiS.readObject();
+            rutas = (Senda) oiS.readObject();
             oiS.close();
             iS.close();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return  rutas;
+        return rutas;
     }
 
 
-    public void startDrawer(int view,NavigationView.OnNavigationItemSelectedListener navigationListener) {
+
+    /*
+    * Inicia el NavigationView y el DrawerLayout necesita el id ,asignado al navigationView en el xml, y un OnNavigationItemSelectedListener
+    * */
+    public void startDrawer(int view, NavigationView.OnNavigationItemSelectedListener navigationListener) {
         navigationView = (NavigationView) findViewById(view);
         navigationView.setNavigationItemSelectedListener(navigationListener);
         navigationView.getHeaderCount();
@@ -222,35 +274,51 @@ public class MisRutas extends AppCompatActivity {
     }
 
 
-    private class OnBackMisRutas extends AsyncTask<Boolean,ArrayList<MiRuta>,ArrayList<MiRuta>> {
+    /*
+    * clase interna cuando es llamada y ejecutada obtiene las rutas del usuario y genera un archivo .senda
+    * */
+    private class OnBackMisRutas extends AsyncTask<Boolean, ArrayList<MiRuta>, ArrayList<MiRuta>> {
 
+
+        /*
+        * metodo sobreescrito heredado del padre AsyncTask
+        * es llamado al ejecutar la clase
+        * se hace la conexion a la base y se buscan las rutas relacionadas con el usuario
+        * */
         @Override
         protected ArrayList<MiRuta> doInBackground(Boolean... params) {
             ArrayList<MiRuta> rutas = null;
             try {
                 Conexion conexion = new Conexion("http://sysintpro.com.mx/PruebasApiGoogle/WSSApp/Peticiones.php");
                 HashMap<String, String> parametros = new HashMap<>();
-                parametros.put("numPeticion","7");
+                parametros.put("numPeticion", "7");
                 parametros.put("idUsuario", usuario.getIdUsuario());
                 conexion.setParametros(parametros);
                 conexion.executar(Conexion.metodoPeticion.POST);
                 String respuesta = conexion.getRespuesta();
-                if(Stuff.existe(respuesta)){
+                if (Stuff.existe(respuesta)) {
                     rutas = Stuff.misRutas(respuesta);
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 return null;
             }
             return rutas;
         }
 
+        /*
+        * metodo sobreescrito heredado del padre AsyncTask
+        * es llamado al terminar el metodo doInBackground
+        *
+        *
+        * si las rutas son diferentes de nulo se genera un archivo senda y se cargar el RecyclerView
+        * */
         @Override
         protected void onPostExecute(ArrayList<MiRuta> rutas) {
             super.onPostExecute(rutas);
-            if(rutas != null){
+            if (rutas != null) {
                 Senda senda = new Senda(rutas);
-                generarSENDA(senda,"some");
+                generarSENDA(senda, "some");
                 cargarRecyclerView(rutas);
             }
         }

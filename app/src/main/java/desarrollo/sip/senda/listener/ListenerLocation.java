@@ -39,6 +39,16 @@ public class ListenerLocation implements LocationListener {
     Dialog dialog;
     LocationManager manager;
 
+    /*
+    * Esta clase es un d@$!"dre puede ser bastante mas optimizada
+    *
+    * hereda de LocationListener
+    * calcula la distancia del punto obtenido por el gps con respecto al punto seleccionado
+    *
+    * Para ser insatnciada debe recibir una activiadad DetallesPuntosActivity, Punto, Context, View, String idUsuario y LocationManager
+    *
+    * */
+
     public ListenerLocation(DetallesPuntoActivity view, Punto puntoDest, Context context, View viewM, String idUsuario, LocationManager manager) {
         this.view = view;
         this.puntoDest = puntoDest;
@@ -54,6 +64,12 @@ public class ListenerLocation implements LocationListener {
         contador.execute();
     }
 
+    /*
+    * Metodo sobreescrito de la interface LocatinoListener
+    *
+    * es llamado cada vez que la posicion cambia
+    *
+    * */
     @Override
     public void onLocationChanged(Location location) {
         LatLng puntoOrigen = new LatLng(location.getLatitude(), location.getLongitude());
@@ -85,6 +101,14 @@ public class ListenerLocation implements LocationListener {
         dialog.dismiss();
     }
 
+
+    /*
+    *
+    * Metodo sobreescrito por la interface
+    *
+    * Es llamado cada vez que cambia el estado del gps
+    *
+    * */
     @Override
     public void onProviderDisabled(String provider) {
         if (primera != false) {
@@ -98,6 +122,11 @@ public class ListenerLocation implements LocationListener {
     }
 
 
+    /*
+    *
+    * realiza el calculo para saber si estas cerca del punto
+    *
+    * */
 
     public boolean estaCerca(Punto origen, LatLng destino) {
         double latO = origen.LatDouble();
@@ -113,6 +142,11 @@ public class ListenerLocation implements LocationListener {
         }
     }
 
+
+    /*
+    *
+    * Calcula la distancia
+    * */
     public double distancia(double x1, double y1, double x2, double y2) {
         double r = 0;
         double x = x2 - x1;
@@ -125,6 +159,15 @@ public class ListenerLocation implements LocationListener {
         Log.wtf("Distancia", "" + r);
         return r;
     }
+
+
+    /*
+    * Clase interna que hereda de AsyncTask
+     *
+     * si no se puede determinar la posisicon detiene el hilo
+     * si se obtiene es creada una tubla en acciones de la base de datos
+     *
+    * */
 
     private class OnBackContador extends AsyncTask<String, String, Boolean> {
 

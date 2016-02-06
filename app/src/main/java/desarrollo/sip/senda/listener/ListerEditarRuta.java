@@ -23,6 +23,11 @@ public class ListerEditarRuta implements GoogleMap.OnMarkerClickListener {
     List<Punto> destinosOrg;
     Context context;
 
+    /*
+    * clase que implementa la interface
+    *
+    * */
+
     public ListerEditarRuta(AdaptadorRutaEditar adaptadorRutaEditar, List<Punto> destinos, Context context,List<Punto> destinosOrg) {
         this.adaptadorRutaEditar = adaptadorRutaEditar;
         this.destinos = destinos;

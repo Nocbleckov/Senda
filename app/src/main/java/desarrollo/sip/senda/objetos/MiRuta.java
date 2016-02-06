@@ -29,7 +29,7 @@ import desarrollo.sip.senda.activities.MisRutas;
  * Created by DESARROLLO on 16/01/16.
  */
 public class MiRuta extends WithImage implements Parcelable,Serializable {
-    private String identificador,siglas,municipio,estado,cadenaRuta;
+    private String identificador,siglas,municipio,estado,cadenaRuta,tiempoManual,original,version;
     //private List<LatLng> puntos;
 
     //private transient LatLng puntoCentro;
@@ -43,7 +43,7 @@ public class MiRuta extends WithImage implements Parcelable,Serializable {
     //private Bitmap foto;
 
 
-    public MiRuta(String siglas,String municipio,String estado,String idRuta,String cadenaRuta,String rutaImagen,ArrayList<Punto> destinos,LatLng puntoCentro,Aristas aristas){
+    public MiRuta(String siglas,String municipio,String estado,String idRuta,String cadenaRuta,String rutaImagen,ArrayList<Punto> destinos,LatLng puntoCentro,Aristas aristas,String tiempoManual,String original,String version){
         this.cadenaRuta = cadenaRuta;
         this.id = idRuta;
         this.siglas = siglas;
@@ -52,6 +52,9 @@ public class MiRuta extends WithImage implements Parcelable,Serializable {
         this.identificador = idRuta+"_"+siglas+"_"+estado;
         this.rutaImagen = rutaImagen;
         this.destinos = destinos;
+        this.tiempoManual = tiempoManual;
+        this.original = original;
+        this.version = version;
 
         //this.puntoCentro = puntoCentro;
 
@@ -83,6 +86,11 @@ public class MiRuta extends WithImage implements Parcelable,Serializable {
         destinos = (ArrayList<Punto>)in.readValue(MiRuta.class.getClassLoader());
         latitud = in.readString();
         longitud = in.readString();
+
+        tiempoManual = in.readString();
+        original = in.readString();
+        version = in.readString();
+
         aristas =(Aristas) in.readValue(MiRuta.class.getClassLoader());
         imagenCode = (byte[])in.readValue(MiRuta.class.getClassLoader());
 
@@ -165,6 +173,18 @@ public class MiRuta extends WithImage implements Parcelable,Serializable {
         //new ColocarFoto(imageView).execute();
     }*/
 
+    public String getTiempoManual() {
+        return tiempoManual;
+    }
+
+    public String getOriginal() {
+        return original;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
     public LatLng getPuntoCentro() {
         return new LatLng(centroLat,centroLng) ;
     }
@@ -196,6 +216,9 @@ public class MiRuta extends WithImage implements Parcelable,Serializable {
         dest.writeValue(destinos);
         dest.writeString(latitud);
         dest.writeString(longitud);
+        dest.writeString(tiempoManual);
+        dest.writeString(original);
+        dest.writeString(version);
         dest.writeValue(aristas);
         dest.writeValue(imagenCode);
     }

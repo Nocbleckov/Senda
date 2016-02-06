@@ -161,6 +161,9 @@ public class Stuff {
                     String rutaImagen = ruta.getString("rutaImagen");
                     JSONArray destinos = ruta.optJSONObject("destinos").optJSONArray("puntos");
                     ArrayList<Punto> puntos = obtenerPuntosA(destinos);
+                    String tiempoManual = ruta.optString("tiempoManual");
+                    String original = ruta.optString("original");
+                    String version = ruta.optString("version");
 
                     LatLng centro = getLatLng(ruta.optJSONObject("centro"));
                     LatLng sI = getLatLng(ruta.optJSONObject("sI"));
@@ -170,7 +173,7 @@ public class Stuff {
 
                     Aristas aristas = new Aristas(sI,sD,iI,iD);
 
-                    MiRuta rutaTemp = new MiRuta(siglas,municipio,estado,idRuta,cadenaRuta,rutaImagen,puntos,centro,aristas);
+                    MiRuta rutaTemp = new MiRuta(siglas,municipio,estado,idRuta,cadenaRuta,rutaImagen,puntos,centro,aristas,tiempoManual,original,version);
                     misRutasTemp.add(rutaTemp);
                 }
 

@@ -24,6 +24,19 @@ public class ListenerMarkers implements OnMarkerClickListener {
     Usuario usuario;
     String  idUsuario;
     MapaActivity mapaActivity;
+    /*
+    *
+    * clase que implementa la interface OnMarkerClickListener que se
+    * encarga de escuchar los click que se le hagan a las markas en el mapa
+    *
+    * encuentra el punto relacionado con la marca presionada para iniciar una actividad y mostrar
+    * sus detalles
+    *
+    * para poder instanciarla es necesario pasarle como parametros Array Puntos, Context y Usuario
+    *
+    *
+    *
+    * */
 
     public ListenerMarkers(Context context, Usuario usuario, MapaActivity mapaActivity){
         puntos = new ArrayList<>();
@@ -38,6 +51,14 @@ public class ListenerMarkers implements OnMarkerClickListener {
         this.usuario = usuario;
     }
 
+
+    /*
+    * metodo sobreescrito que pertenece a la interface
+    *
+    * es llamado cada vez que se preciona una marca del mapa
+    * busca el punto que pertences a la marca y lo pasa a la siguiente actividad DetallesPunto
+    *
+    * */
     @Override
     public boolean onMarkerClick(Marker marker) {
         Punto punto = buscar(marker.getTitle());
@@ -49,6 +70,10 @@ public class ListenerMarkers implements OnMarkerClickListener {
         return false;
     }
 
+
+    /*
+    * Busca el punto relacionado con la marca y lo devuelve
+    * */
     public Punto buscar(String titulo){
         Punto temp = null;
 
@@ -61,6 +86,8 @@ public class ListenerMarkers implements OnMarkerClickListener {
         return temp;
     }
 
+
+    /*agrega puntos al array de la clase*/
     public void agregarPuntos(ArrayList<Punto> puntos){
         this.puntos.addAll(puntos);
        // mapaActivity.setPuntosMapa(this.puntos);
