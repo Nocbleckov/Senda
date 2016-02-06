@@ -22,12 +22,29 @@ public class Login implements Serializable {
     private byte[] bytesUsuario;
 
 
+    /*
+    *
+    * Esta clase es la que se guardara en el .login
+    *
+    * Para ser creada necesita un nombre de usuario, contraseña , serial y usuario
+    *
+    * cuando los recive los combirete en arreglo de bytes y los codifica
+    *
+    * */
+
     public Login(String usuario,String pass,Long serial,Usuario usuObj){
         bytesUsario = codificar(usuario.getBytes(Charset.forName("UTF-8")));
         bytesPass = codificar(pass.getBytes(Charset.forName("UTF-8")));
         bytesSerial = codificar(longToBytes(serial));
         bytesUsario = Stuff.toByteArray(usuObj);
     }
+
+
+    /*
+    *
+    * codifica el arreglo de bytes
+    *
+    * */
     private byte[] codificar(byte[] arreglo){
 
         for(int i = 0;i<arreglo.length;i++){
@@ -39,12 +56,21 @@ public class Login implements Serializable {
     }
 
 
+    /*
+    * Convierte un Long o long  en un arreglo de bytes y lo devuelve
+    * */
+
     public byte[] longToBytes(long x) {
         ByteBuffer buffer = ByteBuffer.allocate((Long.SIZE / Byte.SIZE) + 10);
         buffer.putLong(x).array();
         return buffer.array();
     }
 
+
+    /*
+    *
+    * recupera el Long o long de un arreglo de bytes y lo devuelve
+    * */
     public long bytesToLong(byte[] bytes) {
         ByteBuffer buffer = ByteBuffer.allocate((Long.SIZE/Byte.SIZE) + 10);
         buffer.put(bytes);
@@ -52,6 +78,10 @@ public class Login implements Serializable {
         return buffer.getLong();
     }
 
+
+    /*
+    * devuelve el long recuperdado del arreglo de bytes
+    * */
     public Long getID(){
         try{
             Long id = bytesToLong(bytesSerial);
@@ -62,6 +92,11 @@ public class Login implements Serializable {
         }
     }
 
+    /*
+    *
+    * recupera el string usuario del arreglo de bytes y lo devuelve
+    *
+    * */
     public String getUsario(){
         try {
             String usuario = new String(bytesUsario, "UTF-8");
@@ -72,6 +107,13 @@ public class Login implements Serializable {
         }
     }
 
+
+    /*
+    *
+    *
+    * recupera el String contraseña del arreglo de bytes y lo devuelve
+    *
+    * */
     public String getPass(){
         try{
             String pass = new String(bytesPass,"UTF-8");
@@ -82,6 +124,12 @@ public class Login implements Serializable {
         }
     }
 
+
+    /*
+    *
+    * recupera el usuario del arreglo de bytes y lo devuelve
+    *
+    * */
     public Usuario getUsuarioObject(){
         Usuario temp = null;
         ByteArrayInputStream bIs = null;

@@ -13,6 +13,14 @@ import desarrollo.sip.senda.activities.MisRutas;
 public class Senda implements Serializable{
 
     ArrayList<MiRuta> misRutas;
+    /*
+    *
+    * Este clase es la que se guarda en un archivo .senda
+    *
+    * solo guarda un arreglo de MiRuta
+    *
+    *
+    * */
 
     public Senda(ArrayList<MiRuta> misRutas){
         this.misRutas = misRutas;

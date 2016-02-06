@@ -13,27 +13,21 @@ import desarrollo.sip.senda.abstractClass.WithImage;
  * Created by DESARROLLO on 28/01/16.
  */
 public class Aristas implements Serializable,Parcelable {
-
-    //private LatLng aristaSI;
-
     private double latAristaSI;
     private double lngAristaSI;
-
-    //private LatLng aristaSD;
 
     private double latAristaSD;
     private double lngAristaSD;
 
-    //private LatLng aristaII;
-
     private double latAristaII;
     private double lngAristaII;
 
-
-    //private LatLng aristaID;
-
     private double latAristaID;
     private double lngAristaID;
+
+    /*
+    * Guarda las aristas resultantes de la cuadrangulacion de la ruta
+    * */
 
     public Aristas(LatLng aristaSI,LatLng aristaSD,LatLng aristaII, LatLng aristaID){
 
@@ -50,6 +44,9 @@ public class Aristas implements Serializable,Parcelable {
         this.lngAristaID = aristaII.longitude;
     }
 
+    /*
+    * Este construccion es usado cuando se Parcea el objeto
+    * */
     public Aristas(Parcel in){
 
         latAristaSI = in.readDouble();
@@ -78,18 +75,33 @@ public class Aristas implements Serializable,Parcelable {
         }
     };
 
+    /*
+    * Devuelve un LatLng tomando los valores de latAristaSI(Superior Izquierda) y lngAristaSI(Superior Izquierda)
+    * */
+
     public LatLng getAristaSI() {
         return new LatLng(latAristaSI,lngAristaSI);
     }
 
+
+
+    /*
+    * Devuelve un LatLng tomando los valores de latAristaSD(Superior Derecha) y lngAristaSD(Superior Derecha)
+    * */
     public LatLng getAristaSD() {
         return new LatLng(latAristaSD,lngAristaSD);
     }
 
+    /*
+    * Devuelve un LatLng tomando los valores de latAristaII(Inferiror Izquierda) y lngAristaII(Inferior Izquierda)
+    * */
     public LatLng getAristaII() {
         return new LatLng(latAristaII,lngAristaII);
     }
 
+    /*
+    * Devuelve un LatLng tomando los valores de latAristaID(Inferiror Derecha) y lngAristaID(Inferiror Derecha)
+    * */
     public LatLng getAristaID() {
         return new LatLng(latAristaID,lngAristaID);
     }
@@ -99,6 +111,9 @@ public class Aristas implements Serializable,Parcelable {
         return 0;
     }
 
+    /*
+    * estos datos son los que se escriben durente el parceo
+    * */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 

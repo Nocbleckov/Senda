@@ -29,10 +29,9 @@ import desarrollo.sip.senda.activities.MisRutas;
  * Created by DESARROLLO on 16/01/16.
  */
 public class MiRuta extends WithImage implements Parcelable,Serializable {
-    private String identificador,siglas,municipio,estado,cadenaRuta,tiempoManual,original,version;
-    //private List<LatLng> puntos;
 
-    //private transient LatLng puntoCentro;
+
+    private String identificador,siglas,municipio,estado,cadenaRuta,tiempoManual,original,version;
 
     private double centroLat;
     private double centroLng;
@@ -40,8 +39,16 @@ public class MiRuta extends WithImage implements Parcelable,Serializable {
 
     private Aristas aristas;
     private ArrayList<Punto>destinos;
-    //private Bitmap foto;
 
+    /*
+    *
+    * Esta clase es la que se carga cuando se devuelven los datos de las rutas, de el web service
+    *
+    * recive Strings siglas,municipio,estado,idRuta,cadenaRuta,rutaImagen,tiempoManual,original y version
+    *
+    * recive un ArreyList de punto, un Latlng centro y aristas
+    *
+    * */
 
     public MiRuta(String siglas,String municipio,String estado,String idRuta,String cadenaRuta,String rutaImagen,ArrayList<Punto> destinos,LatLng puntoCentro,Aristas aristas,String tiempoManual,String original,String version){
         this.cadenaRuta = cadenaRuta;
@@ -56,17 +63,20 @@ public class MiRuta extends WithImage implements Parcelable,Serializable {
         this.original = original;
         this.version = version;
 
-        //this.puntoCentro = puntoCentro;
-
         this.centroLat = puntoCentro.latitude;
         this.centroLng = puntoCentro.longitude;
-
 
         this.latitud  =  ""+puntoCentro.latitude;
         this.longitud = ""+puntoCentro.longitude;
         this.aristas = aristas;
     }
 
+
+    /*
+    *
+    * Este constructor es usado cuando se parcea el objeto
+    *
+    * */
     public MiRuta(Parcel in){
 
         identificador = in.readString();
@@ -75,10 +85,7 @@ public class MiRuta extends WithImage implements Parcelable,Serializable {
         estado = in.readString();
         id = in.readString();
         cadenaRuta = in.readString();
-        //puntos = (List<LatLng>)in.readValue(MiRuta.class.getClassLoader());
 
-
-        //puntoCentro = (LatLng)in.readValue(MiRuta.class.getClassLoader());
         centroLat = (double)in.readDouble();
         centroLng = (double)in.readDouble();
 
@@ -108,22 +115,6 @@ public class MiRuta extends WithImage implements Parcelable,Serializable {
         }
     };
 
-    /*private void writeObject(java.io.ObjectOutputStream stream) throws IOException {
-
-
-        stream.writeObject(identificador);
-        stream.writeObject(siglas);
-        stream.writeObject(municipio);
-        stream.writeObject(estado);
-        stream.writeObject(cadenaRuta);
-        stream.writeDouble(centroLat);
-        stream.writeObject(centroLng);
-
-    }*/
-
-    /*public void setFoto(Bitmap foto) {
-        this.foto = foto;
-    }*/
 
     public void setCadenaRuta(String cadenaRuta) {
         this.cadenaRuta = cadenaRuta;
@@ -133,9 +124,6 @@ public class MiRuta extends WithImage implements Parcelable,Serializable {
         return cadenaRuta;
     }
 
-    /*public Bitmap getFoto() {
-        return foto;
-    }*/
 
     public void setRutaImagen(String rutaImagen) {
         this.rutaImagen = rutaImagen;
@@ -162,16 +150,12 @@ public class MiRuta extends WithImage implements Parcelable,Serializable {
     }
 
     public List<LatLng> getPuntos() {
-        //this.puntos = PolyUtil.decode(cadenaRuta);
         return  PolyUtil.decode(cadenaRuta);
     }
 
     public Aristas getAristas() {
         return aristas;
     }
-    /*public void  getfoto(ImageView imageView){
-        //new ColocarFoto(imageView).execute();
-    }*/
 
     public String getTiempoManual() {
         return tiempoManual;
@@ -199,6 +183,12 @@ public class MiRuta extends WithImage implements Parcelable,Serializable {
         return 0;
     }
 
+    /*
+    *
+    * Este metodo es usado antes del parceo para escribir los datos
+    *
+    * */
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(identificador);
@@ -207,9 +197,7 @@ public class MiRuta extends WithImage implements Parcelable,Serializable {
         dest.writeString(estado);
         dest.writeString(id);
         dest.writeString(cadenaRuta);
-        //dest.writeValue(puntos);
 
-        //dest.writeValue(puntoCentro);
         dest.writeDouble(centroLat);
         dest.writeDouble(centroLng);
 

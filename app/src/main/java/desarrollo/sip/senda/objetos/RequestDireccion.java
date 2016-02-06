@@ -15,6 +15,13 @@ public class RequestDireccion {
     LatLng origin,destination;
     private ArrayList<LatLng> waypoints;
 
+    /*
+    * esta clase es usado para obtener un HashMap con los datos preparados para realizar una conexion con la direccion direccion de GoogleMap
+    *
+    * mete los datos en un hasmap y los devuevle
+    *
+    * */
+
     public RequestDireccion(){
         parametros = new HashMap<>();
         waypoints = new ArrayList<>();
@@ -42,6 +49,9 @@ public class RequestDireccion {
         return parametros;
     }
 
+    /*
+    * acomoda los puntos de los waypoint en un string para posteriosmente agregarlos al hashMap
+    * */
 
     public void buildWaypoints(){
         String waypoint = "";

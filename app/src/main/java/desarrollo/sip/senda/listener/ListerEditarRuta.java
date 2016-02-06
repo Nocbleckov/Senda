@@ -24,7 +24,9 @@ public class ListerEditarRuta implements GoogleMap.OnMarkerClickListener {
     Context context;
 
     /*
-    * clase que implementa la interface
+    * clase que implementa la interface OnMarkerClickListener
+    * agrega objetos Punto al listview de EditarRuta
+    *
     *
     * */
 
@@ -35,6 +37,10 @@ public class ListerEditarRuta implements GoogleMap.OnMarkerClickListener {
         this.destinosOrg = destinosOrg;
     }
 
+
+    /*
+    * Se llama cada vez que se presiona un marker del mapa
+    * */
     @Override
     public boolean onMarkerClick(Marker marker) {
 
@@ -45,6 +51,9 @@ public class ListerEditarRuta implements GoogleMap.OnMarkerClickListener {
         return true;
     }
 
+    /*
+    * Busca la relacion punto con la marca y lo devuelve
+    * */
     public Punto esEste(String title) {
         Punto temp = null;
         for (int i = 0; i < destinosOrg.size(); i++) {
@@ -55,6 +64,10 @@ public class ListerEditarRuta implements GoogleMap.OnMarkerClickListener {
         return temp;
     }
 
+    /*
+    * regresa un true o un false dependiendo si el punto ya existe en el arreglo o no
+    * */
+
     public boolean existe(String direccion) {
         for (int i = 0; i < destinos.size(); i++) {
             if (destinos.get(i).getDireccion().equals(direccion)) {
@@ -64,6 +77,9 @@ public class ListerEditarRuta implements GoogleMap.OnMarkerClickListener {
         return false;
     }
 
+    /*
+    * agrega los Puntos al arreglo si no existen
+    * */
     public void agregarItems(Punto direccion, Marker marker) {
         Vibrator v = (Vibrator) context.getSystemService(context.VIBRATOR_SERVICE);
         v.vibrate(33);

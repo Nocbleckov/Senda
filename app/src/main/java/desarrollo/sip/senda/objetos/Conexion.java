@@ -26,10 +26,33 @@ public class Conexion {
     private String mensaje;
     private String respuesta;
 
+    /* La clase conexion se conecta con el web services
+     *
+     * es necesario asignarle parametros con un HashMap<String,String>
+     *     donde el primer parametro es el nombre con el que lo resibira el Post el segundo parametro es el valor
+     *
+     *  $numpeticion = $_Post['numPeticion'];
+     *                            |
+     *                             |
+     *                       "numPeticion" => "2"
+     *
+     *
+     *
+    * */
+
+    /*
+    * devuelve el mensaje recibida despues de Realizar la conexion
+    * */
     public String getMensaje(){
         return mensaje;
     }
 
+    /*
+    * Codigo de respuesta satisfactorio == 200
+    *
+    * Error en servidro == 500
+    *
+    * */
     public int getCodigoRespuesta(){
         return codigoRespuesta;
     }
@@ -37,6 +60,12 @@ public class Conexion {
     public String getRespuesta(){
         return respuesta;
     }
+
+    /*
+    *
+    * Este metodo es llamado para asignarle los parametros a la conexion
+    *
+    * */
 
     public void setParametros(Map<String,String> parametros){
 
@@ -75,6 +104,10 @@ public class Conexion {
         conexion = (HttpURLConnection)url.openConnection();
 
     }
+
+    /*
+    * Este metodo debe ser invocado para ejecutar la conexion
+    * */
 
     public void executar(metodoPeticion metodo) throws Exception{
 

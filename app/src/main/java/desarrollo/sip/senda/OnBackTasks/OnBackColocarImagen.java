@@ -30,11 +30,30 @@ public class OnBackColocarImagen extends AsyncTask<String, Bitmap, Bitmap> {
     private ImageView imageView;
     private static final int BUFFER_SIZE = 16 * 1024;
 
+    /*
+    *
+    * Clase que heredad de AsyncTask
+    *
+    * recive una Clase que herede de WithImage y un ImageView
+    *
+    * su funcion es obtener la imagen de la url y colocarla en ImageView
+    *
+    * si existe la imagen la carga y la coloca en el ImageView
+    *
+    * */
+
     public OnBackColocarImagen(WithImage withImage,ImageView imageView) {
         this.withImage = withImage;
         this.imageView = imageView;
     }
 
+
+    /*
+    *
+    * carga la imagen del objeto File (contiene la direccion
+    * y la devuelve como un bitmap
+    *
+    * */
     private Bitmap cargarFoto(File archivo) {
         Bitmap bm = null;
         ByteArrayOutputStream buffer = null;
@@ -58,6 +77,11 @@ public class OnBackColocarImagen extends AsyncTask<String, Bitmap, Bitmap> {
         return bm;
     }
 
+    /*
+    *
+    * convierte el Bitmap en un arreglo de bytes
+    *
+    * */
     private byte[] bitmapToByteArray(Bitmap bm){
         byte[] temp = null;
 
@@ -68,6 +92,11 @@ public class OnBackColocarImagen extends AsyncTask<String, Bitmap, Bitmap> {
         return  temp;
     }
 
+    /*
+    *
+    * crea el archivo(Es una imagen) con el bitmap
+    *
+    * */
     private Bitmap crearFoto(File archivo) {
         Bitmap bm = null;
         try {
@@ -90,6 +119,16 @@ public class OnBackColocarImagen extends AsyncTask<String, Bitmap, Bitmap> {
         return bm;
     }
 
+    /*
+    *
+    * metodo sobreescrito del padre AsyncTask
+    *
+    * si existe la imagen la carga
+    * si no existe la descarga de la url y la guarda
+    *
+    * en ambos casos de obtiene un bitmap que es el que mada al OnPostExecute
+    *
+    * */
     @Override
     protected Bitmap doInBackground(String... params) {
         Bitmap bm = null;
@@ -110,6 +149,12 @@ public class OnBackColocarImagen extends AsyncTask<String, Bitmap, Bitmap> {
         return bm;
     }
 
+
+    /*
+    *
+    * asigna el bitmap a el ImageView
+    *
+    * */
     @Override
     protected void onPostExecute(Bitmap bitmap) {
         super.onPostExecute(bitmap);

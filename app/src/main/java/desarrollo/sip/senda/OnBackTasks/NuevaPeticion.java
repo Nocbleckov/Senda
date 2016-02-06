@@ -14,6 +14,16 @@ public class NuevaPeticion extends AsyncTask<String,String,String>{
     HashMap<String,String> parametros;
     String respuesta;
 
+
+    /*
+    *
+    * clase que hereda de AsyncTask recibe un hashmap de String-String
+    *
+    * y devuevle la respueste mediante una interface
+    *
+    * realiza conexiones con el webservice
+    *
+    * */
     public interface  AsyncResponse {
         void ProccesFinish(String respuesta);
     }

@@ -21,12 +21,19 @@ import desarrollo.sip.senda.abstractClass.WithImage;
 public class Punto extends WithImage implements Parcelable,Serializable {
 
     private String referencias, pais, numero, municipio, localidad, idAccion, estatus, estado, direccion, colonia, codigoPostal, calle,cadenaRuta;
-    //private LatLng coordenada;
 
     public Punto() {
 
     }
 
+    /*
+    *
+    * esta clase es la que se carga cuando se reciven los datos del webservice, los puntos que tiene una ruta.
+    *
+    * necesita String referencias, pais, numero, municipio, longitud, localidad, latitud, idPunto, estatus, estado, direccion, colonia, codigoPostal, calle, cadeRuta, rutaImagen.
+    *
+    *
+    * */
     public Punto(String referencias, String pais, String numero, String municipio, String longitud, String localidad, String latitud, String idPunto, String estatus, String estado, String direccion, String colonia, String codigoPostal, String calle, String cadenaRuta,String rutaImagen) {
         this.referencias = referencias;
         this.pais = pais;
@@ -36,7 +43,6 @@ public class Punto extends WithImage implements Parcelable,Serializable {
         this.localidad = localidad;
         this.latitud = latitud;
         this.id = idPunto;
-        //this.idAccion = idAccion;
         this.estatus = estatus;
         this.estado = estado;
         this.direccion = direccion;
@@ -45,9 +51,13 @@ public class Punto extends WithImage implements Parcelable,Serializable {
         this.calle = calle;
         this.cadenaRuta = cadenaRuta;
         this.rutaImagen = rutaImagen;
-        //latLng(latitud, longitud);
     }
 
+    /*
+    *
+    * Este constructor es llamado cuando se parcea el objeto
+    *
+    * */
     protected Punto(Parcel in) {
         referencias = in.readString();
         pais = in.readString();
@@ -66,8 +76,6 @@ public class Punto extends WithImage implements Parcelable,Serializable {
         calle = in.readString();
         cadenaRuta = in.readString();
         rutaImagen = in.readString();
-        //coordenada = in.readParcelable(LatLng.class.getClassLoader());
-        //coordenada =(LatLng) in.readValue(LatLng.class.getClassLoader());
         imagenCode = (byte[]) in.readValue(Punto.class.getClassLoader());
     }
 
@@ -82,40 +90,7 @@ public class Punto extends WithImage implements Parcelable,Serializable {
             return new Punto[size];
         }
 
-        /*public ArrayList<Punto> newArrayList(int size){
-            return new ArrayList<Punto>(size);
-        }*/
-
     };
-
-    /*public void latLng(String lat, String lng) {
-        try {
-            this.coordenada = new LatLng(Float.parseFloat(lat), Float.parseFloat(lng));
-        } catch (Exception e) {
-            e.printStackTrace();
-            this.coordenada = new LatLng(0, 0);
-        }
-    }*/
-
-    /*public void setCoordenada(LatLng coordenada){
-        this.coordenada = coordenada;
-    }*/
-
-    /*private void writeObject(java.io.ObjectOutputStream stream)throws IOException{
-        stream.writeObject(referencias);
-        stream.writeObject(pais);
-        stream.writeObject(numero);
-        stream.writeObject(municipio);
-        stream.writeObject(localidad);
-        stream.writeObject(idAccion);
-        stream.writeObject(estatus);
-        stream.writeObject(estado);
-        stream.writeObject(direccion);
-        stream.writeObject(colonia);
-        stream.writeObject(codigoPostal);
-        stream.writeObject(calle);
-        stream.writeObject(cadenaRuta);
-    }*/
 
 
     public void setDireccion(String direccion){
@@ -204,6 +179,12 @@ public class Punto extends WithImage implements Parcelable,Serializable {
         return 0;
     }
 
+
+    /*
+    *
+    * este metodo es usado antes del paceo para escribir los datos de la clase
+    *
+    * */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(referencias);

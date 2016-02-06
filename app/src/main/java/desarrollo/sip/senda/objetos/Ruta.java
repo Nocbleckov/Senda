@@ -1,5 +1,6 @@
 package desarrollo.sip.senda.objetos;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -17,6 +18,14 @@ public class Ruta {
     private String id;
     private ArrayList<String> intrucciones ;
     private List<LatLng> puntos;
+
+    /*
+    *
+    * esta clase se carga cuando se obtienen los datos de la conexion con el servidor de google Direccion
+    *
+    * se le debe de asiganar los datos String distancia,duracion,direccionIni,direccionFin y polyline
+    *
+    * */
 
 
     public String getId() {

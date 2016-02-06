@@ -27,8 +27,6 @@ public class CustomTileDw {
     private int x , y, zoom;
     private Dialog dialog;
 
-    //private RegionDwl regionDwl;
-
     private int position;
 
     private TileDwlManager tileDwlManager;
@@ -36,7 +34,14 @@ public class CustomTileDw {
     private TextView progressLabel;
     private double tamañoImagen;
 
-    public CustomTileDw(int x, int y, int zoom, Context context,TileDwlManager tileDwlManager/*,RegionDwl regionDwl*/, ProgressBar progressBar, TextView progressLabel, Dialog dialog){
+    /*
+    *
+    *
+    * esta clase se encarga de descargar las imagenes relacionadas con los Tiles, y mostrar su progreso en el cuador de dialogo
+    *
+    * */
+
+    public CustomTileDw(int x, int y, int zoom, Context context,TileDwlManager tileDwlManager, ProgressBar progressBar, TextView progressLabel, Dialog dialog){
         this.x = x;
         this.y = y;
         this.dialog = dialog;
@@ -49,6 +54,16 @@ public class CustomTileDw {
 
     }
 
+
+    /*
+    *
+    * verifica si la coordenada del Tile puede exisitir
+    *
+    * si es asi convoca a su clase interna OnBackDescarga
+    * de lo contrario no hace nada
+    *
+    *
+    * */
     public void iniciarDescarga(){
         if(x<=coordMax(zoom) && y<=coordMax(zoom) && x>=0 && y>=0){
             tamañoImagen = tamaño();
@@ -56,20 +71,45 @@ public class CustomTileDw {
         }
     }
 
+    /*
+    *
+    *
+    * devuelve un entero que representa la coordenada maxima que
+    * puede existir en el mundo dependiendo del mundo
+    *
+    * */
     private int coordMax(int zoom){
         int max =(int) Math.sqrt(Math.pow(4,zoom)) -1 ;
         return max;
     }
 
+    /*
+    *
+    * resive su posicion en un arreglo
+    *
+    * */
     public void setPosition(int position) {
         this.position = position;
     }
 
+    /*
+    *
+    * devuelve su posicion en el arreglo
+    *
+    * */
     public int getPosition() {
         return position;
     }
 
 
+    /*
+    *
+    *
+    * crea un File con la direccions x,y y el zoom
+    *
+    * si existe no lo crea de lo contrario lo crea
+    *
+    * */
     private File crearRuta(int x,int zoom){
 
         boolean succes = false;
@@ -113,6 +153,13 @@ public class CustomTileDw {
         return result;
     }
 
+
+
+    /*
+    *
+    * obtiene el tamañao de la imagen que va a descargar(solo 1)
+    *
+    * */
     public  double tamaño(){
         try {
             URL direccion = new URL(url) ;
@@ -130,6 +177,12 @@ public class CustomTileDw {
         return tamañoImagen;
     }
 
+
+    /*
+    *
+    * clase interna que heredad de Asynktask
+    *
+    * */
     private class OnBackDescarga extends AsyncTask<String,Void,Bitmap>{
         String url;
 
@@ -137,6 +190,16 @@ public class CustomTileDw {
             this.url = url;
         }
 
+
+        /*
+        *
+        * Metodo hereedado de la clase padre AsyncTask
+        *
+        * su funcion es obtener la imagen de la url convertirla en un Bitmap
+        *
+        * y posteriormente devolversela al metodo onProgresUpdate
+        *
+        * */
         @Override
         protected Bitmap doInBackground(String... params) {
 
@@ -159,6 +222,21 @@ public class CustomTileDw {
             return btm;
         }
 
+
+        /*
+        *
+        * metodo heredado de la clase padre
+        *  es llamado cuando se utuliza el metodo publishProgress()
+        *
+        *  sufuncion es aumentar la barra de progreso del dialog y cambiar el estado de progreslabel
+        *
+        *          .-> esto es lo que cambia del label
+        *          |
+        *          |
+        *   loquellevoenKb / maximodeKB
+        *
+        *
+        * */
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);

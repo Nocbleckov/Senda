@@ -20,7 +20,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by DESARROLLO on 02/12/15.
  */
-public class Usuario extends Stuff implements Parcelable, Serializable {
+public class Usuario implements Parcelable, Serializable {
 
     private String idUsuario, nombre, idPerfil, estado, url, idBrigada;
     private byte[] bytesNick, bytesPass;
@@ -30,6 +30,23 @@ public class Usuario extends Stuff implements Parcelable, Serializable {
 
     }
 
+
+    /*
+    *
+    * Esta clase es cargada con los datos recibidos del webservices
+    *
+    * */
+
+
+    /*
+    *
+    * Este constructor recive un string data obtenido del webservices
+    *
+    * y carga los datos nombre, idUsario, idPerfil, estado,url, idBrigada,
+    *
+    * obtiene el nick y el pass, los codifica para posterioermente guardarlos en un arreglo de bytes
+    *
+    * */
     public Usuario(String data) {
         if (!data.equalsIgnoreCase("")) {
             JSONObject json;
@@ -60,7 +77,6 @@ public class Usuario extends Stuff implements Parcelable, Serializable {
 
 
                 }
-                //new DescargaFoto(url).execute();
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -74,7 +90,6 @@ public class Usuario extends Stuff implements Parcelable, Serializable {
         this.idPerfil = idPerfil;
         this.estado = estado;
         this.url = url;
-        //new DescargaFoto(url).execute();
     }
 
     protected Usuario(Parcel in) {
@@ -84,8 +99,6 @@ public class Usuario extends Stuff implements Parcelable, Serializable {
         estado = in.readString();
         url = in.readString();
         idBrigada = in.readString();
-        //nick = in.readString();
-        //pass = in.readString();
         bytesNick = (byte[]) in.readValue(Usuario.class.getClassLoader());
         bytesPass = (byte[]) in.readValue(Usuario.class.getClassLoader());
         fotoarray = (byte[]) in.readValue(Usuario.class.getClassLoader());
@@ -172,9 +185,7 @@ public class Usuario extends Stuff implements Parcelable, Serializable {
         dest.writeString(estado);
         dest.writeString(url);
         dest.writeString(idBrigada);
-        //dest.writeString(nick);
         dest.writeValue(bytesNick);
-        //dest.writeString(pass);
         dest.writeValue(bytesPass);
         dest.writeValue(fotoarray);
     }

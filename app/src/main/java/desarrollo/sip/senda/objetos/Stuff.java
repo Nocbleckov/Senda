@@ -36,6 +36,24 @@ import desarrollo.sip.senda.R;
  */
 public class Stuff {
 
+    /*
+    *
+    * Esta clase solo contiene metodos estaticos por lo que no se es necesario instanciarla
+    * solo convocar los metodos y pasarle los parametros correctos
+    *
+    * */
+
+    private Stuff(){
+
+    }
+
+
+    /*
+    *
+    * verifica si una conexion regresa una respuesta satisfactoria
+    *
+    * */
+
     public static boolean existe(String data) {
 
         Boolean existe = false;
@@ -105,6 +123,14 @@ public class Stuff {
         return  puntosTemp;
     }*/
 
+
+    /*
+    *
+    *
+    * Recibe un JSONArray y obtiene su informacion para instanciar Punto y guardarlos en un ArrayList
+    * que posteriormente devolvera
+    *
+    * */
     public static ArrayList<Punto> obtenerPuntosA(JSONArray jsonArray){
         ArrayList<Punto> puntosTemp =  new ArrayList<Punto>();
         if(jsonArray != null){
@@ -141,6 +167,15 @@ public class Stuff {
         }
         return  puntosTemp;
     }
+
+    /*
+    *
+    *
+    * Recibe un String data(es la respuesta de una conexion), obtiene su informacion y crea instancias de MiRuta, las guarda en
+    * un ArrayList y posteriormente lo regresa
+    *
+    *
+    * */
 
     public static ArrayList<MiRuta> misRutas(String data){
         ArrayList<MiRuta> misRutasTemp = new ArrayList<>() ;
@@ -185,6 +220,13 @@ public class Stuff {
         return misRutasTemp;
     }
 
+    /*
+    *
+    * devuelve un LatLng, deve recivir un JSONObject.
+    *
+    * saca la informacion del JSONObject para crear un LatLng y devolverlo
+    *
+    * */
     public static LatLng getLatLng(JSONObject object){
         LatLng temp = null;
 
@@ -196,6 +238,13 @@ public class Stuff {
         return  temp;
     }
 
+    /*
+    *
+    * recibe un string data(se obtiene de la conexion a Direccion de Google), obtiene su informacion y crea una instancia de Ruta y
+    *
+    * posteriosmente las devuelve
+    *
+    * */
     public static Ruta obtenerRuta(String data){
 
         Ruta rtTemp = new Ruta();
@@ -235,6 +284,13 @@ public class Stuff {
         return  rtTemp;
     }
 
+    /*
+    *
+    * este es devuelve un Toast personalizado con el layout 'custom_toast.xml'
+    *
+    * deve recibir un View y un String mensaje
+    *
+    * */
     public static Toast toastCsm(View view,String mnsj){
 
         LayoutInflater inf = LayoutInflater.from(view.getContext());
@@ -249,6 +305,14 @@ public class Stuff {
         return  mensaje;
     }
 
+
+    /*
+    *
+    * Devuelve un Toast personalizado con el layout 'custom_toas.xml'
+    *
+    * debe recibir un Context y String mensaje
+    *
+    * */
     public static Toast toastCsmCntx(Context context,String mnsj){
 
         LayoutInflater inf = LayoutInflater.from(context);
@@ -264,6 +328,14 @@ public class Stuff {
         return  mensaje;
     }
 
+
+    /*
+    *
+    * Devuelve un Dialog personalisado con el layout 'textMensaje_CustomDialog'
+    *
+    * debe recibir un Context y un String mensaje
+    *
+    * */
     public static Dialog dialogCsm(Context context,String msnj){
         Dialog dialog =  new Dialog(context);
         dialog.setContentView(R.layout.custom_dialog);
@@ -284,6 +356,16 @@ public class Stuff {
         return dialog;
     }
 
+
+
+    /*
+    *
+    * Devuelve un Dialog personalizado con el layout 'custom_dialogprobar'
+    *
+    * debe recibir un Context
+    *
+    *
+    * */
     public static Dialog dialogProgressBar(Context context){
         Dialog dialog = new Dialog(context,android.R.style.Theme_Translucent_NoTitleBar);
         dialog.setContentView(R.layout.custom_dialogprobar);
@@ -297,6 +379,14 @@ public class Stuff {
         return  dialog;
     }
 
+
+    /*
+    *
+    * devuelve un AletDialog con 2 botones
+    *
+    * recive un Context, String titulo, String mensaje, OnclickListener para el boton aceptar y un OnclickListener para el boton cancelar
+    *
+    * */
     public static AlertDialog.Builder crearAlrtDialog(Context context,String titulo,String mensaje,DialogInterface.OnClickListener aceptar, DialogInterface.OnClickListener cancelar){
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
 
@@ -308,6 +398,13 @@ public class Stuff {
         return dialog;
     }
 
+
+    /*
+    *
+    * Devuelve un dialog personalizado con el layout 'custom_alertdlgconfirmacion'
+    *
+    * deve recivir un Context, String titulo, String mensaje, OnclickListener para aceptar y Onclicklistener para cancelar
+    * */
     public static Dialog crearAlrtDialogCst(Context context,String titulo,String mensaje,View.OnClickListener aceptar, View.OnClickListener cancelar){
         Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.custom_alertdlgconfirmacion);
@@ -323,6 +420,13 @@ public class Stuff {
         return dialog ;
     }
 
+
+    /*
+    *
+    * devuelve un Point
+    * calcual los x, y de la latLng y los convierte en x,y de un Tile
+    *
+    * */
     public static Point cnvLtLnToTileCoord(LatLng coordenada,int zoom,int title_size){
 
         double scale = 1 << zoom;
@@ -335,6 +439,13 @@ public class Stuff {
         return punto;
     }
 
+
+    /*
+    *
+    * Devuvelve un LatLng
+    * calcual los x,y del tile y los convierte en x,y de una LatLng
+    *
+    * */
     public static LatLng tileToLatLng(int x,int y,int zoom){
         LatLng temp = null;
 
@@ -348,6 +459,10 @@ public class Stuff {
         return temp;
     }
 
+    /*
+    * Esta clase es utilizada por cnvLtLnToTileCoord()
+    *
+    * */
     private static com.google.maps.android.geometry.Point project(LatLng coordenada,int title_size){
 
         Double siny = Math.sin(coordenada.latitude * Math.PI / 180);
@@ -361,11 +476,24 @@ public class Stuff {
         return  punto;
     }
 
+    /*
+    * devuevle un double
+    *
+    * convierte una posicion x de un tile a una longitud de un LatLng
+    *
+    * */
     private static Double tileLng(double x,double zoom){
         Double lng = (x/Math.pow(2,zoom)*360-180);
         return lng;
     }
 
+
+    /*
+    * Devuevle un double
+    *
+    * convierte una posicion y de un tile a una latitud de un Latlng
+    *
+    * */
     private static Double tileLat(double y,double zoom){
 
         Double n = Math.PI-2*Math.PI*y/Math.pow(2,zoom);
@@ -374,6 +502,15 @@ public class Stuff {
         return lat;
     }
 
+    /*
+    *
+    * crea un directorio
+    *
+    * Recibe un String con el nombre de la direccion
+    *
+    * si existe no lo creo si no lo crea
+    *
+    * */
     public static File crearRuta(String direccion){
 
         boolean succes = false;
@@ -387,6 +524,12 @@ public class Stuff {
         return  ruta;
     }
 
+
+    /*
+    *
+    * decodifica una cadena Codificada de la clase login
+    *
+    * */
     public static String decodeString(String cadena){
         try {
             byte[] temp = cadena.getBytes(Charset.forName("UTF-8"));
@@ -401,6 +544,12 @@ public class Stuff {
         }
     }
 
+
+    /*
+    *
+    * decodifica un long de la clase login
+    *
+    * */
     public static Long decodeLong(Long cadena){
         try{
 
@@ -416,12 +565,24 @@ public class Stuff {
         }
     }
 
+
+    /*
+    *
+    * convierte un long a un artreglo de Bytes
+    *
+    * */
     private static byte[] longToBytes(long x) {
         ByteBuffer buffer = ByteBuffer.allocate((Long.SIZE / Byte.SIZE) + 10);
         buffer.putLong(x).array();
         return buffer.array();
     }
 
+
+    /*
+    *
+    * convierte un arreglo de byte a un Long
+    *
+    * */
     private static long bytesToLong(byte[] bytes) {
         ByteBuffer buffer = ByteBuffer.allocate((Long.SIZE/Byte.SIZE) + 10);
         buffer.put(bytes);
@@ -442,12 +603,26 @@ public class Stuff {
         return resp;
     }
 
+
+    /*
+    *
+    * en cuentra el punto central con respencto a las delimitaciones
+    * x1,x2,y1,y2 y devuevle un Latlng
+    *
+    *
+    * */
     public static LatLng puntoCentro(double x1,double y1,double x2,double y2){
         double xc = ((x1-x2)/2) + x2;
         double yc = ((y1-y2)/2) + y2;
         return new LatLng(xc,yc);
     }
 
+
+    /*
+    *
+    * Convierte un arreglo de bytes en un objetoUsuario
+    *
+    * */
     public static byte[] toByteArray(Usuario usuario){
         byte[] temp = null;
         ByteArrayOutputStream bOs = null;
@@ -468,6 +643,10 @@ public class Stuff {
         return  temp;
     }
 
+    /*
+    *
+    * codifica un arreglo de bytes
+    * */
     public static byte[] codificar(byte[] arreglo){
 
         for(int i = 0;i<arreglo.length;i++){

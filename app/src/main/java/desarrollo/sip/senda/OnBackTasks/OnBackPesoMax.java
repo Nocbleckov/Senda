@@ -24,6 +24,14 @@ public class OnBackPesoMax implements Runnable {
     private TextView progressLabel;
     private ProgressDialog pd;
 
+    /*
+    *
+    * clase que heredad de Runnable
+    *
+    * debe recibir un arreglo de Coordenas(es una clase interna), TileDwlManager, textView, progressDialog
+    *
+    * */
+
     public OnBackPesoMax(List<TileDwlManager.Coordenada> coordenadas, TileDwlManager tileDwlManager,TextView progressLabel,ProgressDialog pd) {
         this.coordenadas = coordenadas;
         this.tileDwlManager = tileDwlManager;
@@ -31,6 +39,17 @@ public class OnBackPesoMax implements Runnable {
         this.pd = pd;
     }
 
+
+    /*
+    *
+    * metodo sobreescrito que pertenece a la clase padre Runnable
+    *
+    * enviar el arreglo de coordenas al webservice para obtener
+    * el peso de las imagenes antes de descargarla
+    *
+    * el codigo dentro de este metodo se lleba algo de tiempo (2-4 min)
+    *
+    * */
     @Override
     public void run() {
         Gson gson = new Gson();
@@ -55,8 +74,13 @@ public class OnBackPesoMax implements Runnable {
         cambiarUI();
     }
 
+    /*
+    *
+    * este metodo vuevle al hilo principal de la aplicacion
+    * y cambia el progressLabel por el valor obtenerdo
+    *
+    * */
     public void cambiarUI(){
-
         tileDwlManager.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {

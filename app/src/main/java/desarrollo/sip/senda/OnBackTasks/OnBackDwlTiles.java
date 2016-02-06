@@ -33,6 +33,14 @@ public class OnBackDwlTiles extends AsyncTask<String,String,String>{
 
     private MapaActivity activity;
 
+
+    /*
+    *
+    * clase que hereda de AsyncTask
+    *
+    * recibe un TileDwlManager, una Actividad MapaActivity,List de Coodenadas(Esta es una clase interna)
+    *
+    * */
     public OnBackDwlTiles(TileDwlManager tileDwlManager,MapaActivity activity,List<TileDwlManager.Coordenada> coordenadas){
         this.tileDwlManager = tileDwlManager;
         dialog = this.tileDwlManager.getDialog();
@@ -40,12 +48,28 @@ public class OnBackDwlTiles extends AsyncTask<String,String,String>{
         this.coordenadas = coordenadas;
     }
 
+
+    /*
+    *
+    * inicia la Clase OnBackPesoMax
+    *
+    * */
     public void peso(List<TileDwlManager.Coordenada> coordenadas){
         Thread hilo= new Thread(new OnBackPesoMax(coordenadas,tileDwlManager,progressLabel,pd));
         HandlerThread thread = new HandlerThread("hilo");
         hilo.start();
     }
 
+    /*
+    *
+    * metodo que hereda de AsyncTask
+    * es llamada cuando se executa la clase y antes del doInBackground
+    *
+    *
+    * muestra el dialog
+    * referencia la ProgressBar, ProgressLabel
+    *
+    * */
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
@@ -58,6 +82,12 @@ public class OnBackDwlTiles extends AsyncTask<String,String,String>{
         pd = ProgressDialog.show(activity, "Calculando informacion ..", "Esto puede tardar un par de minutos...", true);
     }
 
+    /*
+    *
+    * metodo heredado de AsyncTask
+    * convoca el metodo inciarTile del tileDwlManager
+    *
+    * */
     @Override
     protected String doInBackground(String... params) {
         tileDwlManager.iniciarTiles(tileDwlManager.getZoomInicial(), progressBar, progressLabel);
